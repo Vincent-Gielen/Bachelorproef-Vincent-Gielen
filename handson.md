@@ -1,30 +1,9 @@
-# Rexx code
+# Code
 
-## JCL Skeleton
+## Rexx code
 
-```jcl
-)CM skeleton program to generate job name based on user id.
-)SET FLN = IBMMF.SAMPLE.FILE
-//&USR.A JOB ,'&USR',CLASS=A,MSGCLASS=X,NOTIFY=&USR,
-//	     MSGLEVEL=(1,1)
-//*
-//PROG	EXEC PGM=SAMPLE
-//INPUT DD DSN=&FLN
-```
+### JCL Skeleton
 
-## REXX code to invoke skeleton
+### REXX code to invoke skeleton
 
-```rexx
-/* REXX */
-/* REXX TO PERFORM FILE TAILORING USING SKELETONS */
-USR = 'IBMMF'
-ADDRESS ISPEXEC
-"LIBDEF ISPSLIB DATASET ID('SKEL.DATASET')"
-"FTOPEN TEMP"
-"FTINCL SKELMEM"
-"FTCLOSE"
-"VGET (ZTEMPF) SHARED"
-"VIEW DATASET('"ZTEMPF"')"
-
-EXIT 0
-```
+## Python code
