@@ -1,17 +1,35 @@
 # Bronnen met uitleg
 
-- The Mainframe Is Dead. Long Live the Mainframe! (2013-2018)
+## Mainframe in het algemeen
 
-Tekort aan mensen die met de mainframe kunnen werken met mogelijke oplossingen
+- The future of the mainframe
+- Batch Modernization on z/OS
+- Alive and Kicking: Making the Case for Mainframe Education
+- Teaching Students Mainframe Skills for the Niche Market: An Exploratory Proposal
+- Motivating students to acquire mainframe skills
+- The Mainframe Is Dead. Long Live the Mainframe!
+- A Story about a Dinosaur Called Mainframe and a Small Fly Agile
+- The data center evolution from Mainframe to Cloud
 
-- Alive and Kicking: Making the Case for Mainframe Education. (2010)
+## Rexx
 
-Waarom mainframe opleiding nodig is
+- The design of the REXX language
+- Cognitive Load in Programming Education: Easing the
+Burden on Beginners with REXX
 
-- An empirical comparison of seven programming languages (2000)
+## Python
 
-vergelijking van scripting of scriptachtige talen
+- First experience on python development for survey software, advantages and drawbacks
+- Programming with python
 
-- A Story about a Dinosaur Called Mainframe and a Small Fly Agile (2012)
+## Rexx vs Python
 
-over de veranderingen in mainframe
+- An empirical comparison of seven programming languages
+- Are Scripting Languages Any Good? A Validation of Perl, Python, Rexx, and Tcl against C, C++, and Java
+- Rexx Vs Python: A Comparative Study
+
+## Jinja
+
+## File tailoring services
+
+
