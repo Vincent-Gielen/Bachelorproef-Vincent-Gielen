@@ -26,6 +26,11 @@ Hoe ziet de automatisatie stack van de toekomst eruit op z/OS, en welke obstakel
 
 ## Stand van zaken
 
+- Automatisatie op mainframe
+- Geschiedenis van mainframe scripting talen
+- Modernisatie op mainframe als oplossing voor de skills gap
+- De voor- en nadelen van Python
+
 ## Methodologie
 
 ### Literatuurstudie
