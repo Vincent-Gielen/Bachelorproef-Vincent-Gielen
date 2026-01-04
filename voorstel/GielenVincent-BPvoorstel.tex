@@ -22,13 +22,13 @@
 
 \academicyear{2025-2026}
 
-\title{Rexx File Tailoring en Python Jinja voor het genereren van Job Control Language}
+\title{De automatisatiestack van de toekomst op z/OS met Rexx en Python}
 
 \author{Vincent Gielen}
 \email{vincent.gielen@student.hogent.be}
 
 % TODO: Geef de co-promotor op
-\supervisor[Co-promotor]{A. Coucke (Rabobank, \href{mailto:	arthurcoucke@gmail.com}{arthurcoucke@gmail.com})}
+\supervisor[Co-promotor]{B. Tjassens (Rabobank, \href{mailto:	arthurcoucke@gmail.com}{arthurcoucke@gmail.com})}
 
 % Binnen welke specialisatierichting uit 3TI situeert dit onderzoek zich?
 % Kies uit deze lijst:
@@ -42,16 +42,15 @@
 %   zelf
 %
 \specialisation{Mainframe Expert}
-\keywords{Mainframe, Modernisatie, Rexx, Python, JCL, vergelijking}
+\keywords{Mainframe, Modernisatie, Rexx, Python, JCL, vergelijkende studie}
 
 \begin{document}
 
 \begin{abstract}
-  Dit onderzoek gaat over het gebruik van ISPF Rexx File Tailoring en Python Jinja voor het generen van JCL aan de hand van templates. Dit gebeurt in het kader van automatisatie en zorgt ervoor dat een systeem programmeur consistent en efficiënt te werk kan gaan. Binnen Mainframe wordt er geprobeerd om zo veel mogelijk te moderniseren. Dit is niet alleen om het werk gemakkelijker te maken voor de huidige generatie experts, maar vooral om er voor te zorgen dat de volgende generatie experts sneller kan bijbenen en meedraaien. Door een combinatie van omstandigheden (niche markt, weinig tot geen opleiding, amper open source,...) is er in de arbeidsmarkt voor Mainframe een groot tekort. Dit probleem bestaat al jaren, en er zijn al verschillende initiatieven genomen om dat tekort op te lossen door jonge mensen aan te trekken om zich te specialiseren in deze niche industrie. Een van die initiatieven is het gebruiken van modernere technologieën. De Mainframe maakt gebruik van technologieën die ontwikkelt zijn in dezelfde tijd dat mainframes werden ontwikkeld, de jaren 70. Hoewel de meerderheid van deze technologieën nog steeds werken en zelfs heel efficiënt zijn, maakt dit het moeilijker voor jonge mensen om hun bestaande skills over te dragen naar Mainframe. Iemand die al enkele jaren Python programmeert, kan niet zomaar overschakelen naar Rexx bijvoorbeeld. Dit onderzoek probeert daarom volgende onderzoeksvraag te beantwoorden: Hoe vergelijkt het generen van JCL door het gebruik van Python en Jinja met het gebruik van Rexx File Tailoring?
+  Dit onderzoek wil de toekomst van de automatisatiestack op z/OS (het voornaamste besturingssysteem op mainframe) onderzoeken. Het focust daarbij voornamelijk op Rexx en Python, twee mogelijke kandidaten voor de automatisatiestack op z/OS met elk hun voor- en nadelen. Rexx draagt bij tot de stabiliteit en compatibiliteit van mainframes, terwijl Python dan weer meer gepast lijkt voor de snelle vernieuwing van deze tijd. Wanneer er voor een bepaalde taak moet gekozen worden voor een van die twee scripting talen, is het belangrijk om een goed overzicht te hebben van alle voor- en nadelen. Gezien de modernisatiegolf die momenteel aan de gang is, en het gebrek aan kennis van Rexx bij velen op de arbeidsmarkt, lijkt Python de uitgelezen kandidaat. Maar is dat wel zo? Dit onderzoek tracht volgende onderzoeksvraag te beantwoorden: Hoe ziet de automatisatie stack van de toekomst eruit op z/OS en wat staat er in de weg om van Python de nieuwe standaard te maken?
+  \qquad Om de onderzoeksvraag te beantwoorden wordt eerst een literatuurstudie uitgevoerd. Op basis daarvan volgt een algemene vergelijkende studie van Rexx en Python, waar wordt getracht om enkele veel gebruikte Rexx commando’s te vervangen door Python. Tot slot wordt er met behulp van een PoC dieper ingegaan op één specifieke use case van Rexx, namelijk de File Tailoring Services voor het genereren van Job Control Language (JCL).
+  \qquad Vermoedelijk wijzen de literatuurstudie en de vergelijkende studie uit dat, enerzijds, Python nodig is om de toekomst van mainframe te verzekeren, omdat het de instapdrempel verlaagt voor jongere mensen en veel flexibiliteit geeft. Anderzijds is de efficiëntie van Rexx en de specifieke bouw van Rexx voor scripting en mainframes vermoedelijk niet te evenaren door Python. Uit de PoC zal waarschijnlijk opnieuw blijken dat hoewel Python enorme flexibiliteit biedt, de specifieke bouw van Rexx ervoor zorgt dat alles efficiënter verloopt .
   
-  \qquad Om de onderzoeksvraag te beantwoorden wordt eerst gekeken naar de algemene staat van het gebruik van moderne technologieën in de Mainframe industrie, en meer specifiek automatisatie technologieën. Dit wordt gedaan aan de hand van een literatuurstudie. Daarna wordt er dieper ingegaan op het gebruik van deze twee technologieën voor het creëren van JCL. Deze vergelijkende studie gebeurt aan de hand van een PoC.
-  
-  \qquad Vermoedelijk zal uit de literatuurstudie blijken dat er nood is aan modernisatie van de mainframe, en dat het gebruik van modernere technologieën één van de manieren is om te moderniseren. Echter zal deze wellicht ook uitwijzen dat beide technologieën hun sterktes en zwaktes hebben, en dat geen van beide de ander kan vervangen. Uit de PoC zal wellicht blijken dat de Rexx File Tailoring efficiënter is dan Python Jinja voor het genereren van JCL, maar dat Python gemakkelijker te gebruiken is.
 \end{abstract}
 
 \tableofcontents
