@@ -28,7 +28,7 @@
 \email{vincent.gielen@student.hogent.be}
 
 % TODO: Geef de co-promotor op
-\supervisor[Co-promotor]{B. Tjassens (Rabobank, \href{mailto:	arthurcoucke@gmail.com}{arthurcoucke@gmail.com})}
+\supervisor[Co-promotor]{B. Tjassens (ICU-IT, \href{mailto:	bobby.tjassens.keiser@icu-it.nl}{bobby.tjassens.keiser@icu-it.nl})}
 
 % Binnen welke specialisatierichting uit 3TI situeert dit onderzoek zich?
 % Kies uit deze lijst:
@@ -45,13 +45,15 @@
 \keywords{Mainframe, Modernisatie, Rexx, Python, JCL, vergelijkende studie}
 
 \begin{document}
+    
+    \setlength{\emergencystretch}{1em}
 
 \begin{abstract}
-  Dit onderzoek wil de toekomst van de automatisatiestack op z/OS (het voornaamste besturingssysteem op mainframe) onderzoeken. Het focust daarbij voornamelijk op Rexx en Python, twee mogelijke kandidaten voor de automatisatiestack op z/OS met elk hun voor- en nadelen. Rexx draagt bij tot de stabiliteit en compatibiliteit van mainframes, terwijl Python dan weer meer gepast lijkt voor de snelle vernieuwing van deze tijd. Wanneer er voor een bepaalde taak moet gekozen worden voor een van die twee scripting talen, is het belangrijk om een goed overzicht te hebben van alle voor- en nadelen. \textcolor{red} {Gezien de modernisatiegolf die momenteel aan de gang is, en het gebrek aan kennis van Rexx bij velen op de arbeidsmarkt, lijkt Python de uitgelezen kandidaat. Maar is dat wel zo?} Dit onderzoek tracht volgende onderzoeksvraag te beantwoorden: Hoe ziet de automatisatie stack van de toekomst eruit op z/OS en wat staat er in de weg om van Python de nieuwe standaard te maken?
+  Mainframe is een oude technologie die nog steeds intensief wordt gebruikt. In mainframe werd tot nu toe voornamelijk geautomatiseerd met Rexx. Echter stuit de arbeidsmarkt momenteel op een gebrek aan werkkrachten met voldoende kennis van Rexx. Vanuit die problematiek wil dit onderzoek de toekomst van de automatisatiestack op z/OS (het voornaamste besturingssysteem op mainframe) onderzoeken. Python wordt momenteel overwogen, en soms al gebruikt, als vervanger voor Rexx op mainframe. Python is in tegenstelling tot Rexx meer algemeen gekend. \textcolor{red} {Dus, gezien de modernisatiegolf die momenteel aan de gang is, en het gebrek aan kennis van Rexx bij velen op de arbeidsmarkt, lijkt Python de uitgelezen kandidaat. Maar is dat wel zo?} Dit onderzoek tracht volgende onderzoeksvraag te beantwoorden: Hoe ziet de automatisatie stack van de toekomst eruit op z/OS en wat staat er in de weg om van Python de nieuwe standaard te maken?
   
   \qquad Om de onderzoeksvraag te beantwoorden wordt eerst een literatuurstudie uitgevoerd. Op basis daarvan volgt een algemene vergelijkende studie van Rexx en Python, waar wordt getracht om enkele veel gebruikte Rexx commando’s te vervangen door Python. Tot slot wordt er met behulp van een PoC dieper ingegaan op één specifieke use case van Rexx, namelijk de File Tailoring Services voor het genereren van Job Control Language (JCL).
   
-  \qquad Vermoedelijk wijzen de literatuurstudie en de vergelijkende studie uit dat, enerzijds, Python nodig is om de toekomst van mainframe te verzekeren, omdat het de instapdrempel verlaagt voor jongere mensen en veel flexibiliteit geeft. Anderzijds is de efficiëntie van Rexx en de specifieke bouw van Rexx voor scripting en mainframes vermoedelijk niet te evenaren door Python. Uit de PoC zal waarschijnlijk opnieuw blijken dat hoewel Python enorme flexibiliteit biedt, de specifieke bouw van Rexx ervoor zorgt dat alles efficiënter verloopt .
+  \qquad Vermoedelijk wijzen de literatuurstudie en de vergelijkende studie uit dat, over het algemeen Python enorm veel mogelijkheden biedt, maar dat dat vaak gepaard gaat met verlies aan efficiëntie. Uit de PoC zal echter waarschijnlijk blijken dat in bepaalde gevallen, waaronder het genereren van JCL, Python een volwaardige vervanger van Rexx kan zijn.
   
 \end{abstract}
 
