@@ -24,6 +24,10 @@
 -> Nog een over migratie
 11. Scripting: Higher-Level Programming for the 21st Century
 -> Uitleg over wat scripting is
+12. Mainframe-specialisten HOGENT zijn zeer gegeerd in bedrijfswereld.
+-> artikel hogent over mainframe opleiding
+13. Top 8 Reasons for using Python instead of REXX for z/OS
+-> artikel van bekende mainframer over waarom hij python zou gebruiken ipv rexx. ook bewijs dat rexx veelgebruikt is
 
 Conclusie is een beetje dit: Mainframe blijft. Er zijn nieuwe mensen nodig. Er is niet genoeg educatie. Dus mijn conclusie -> modernisatie om mensen aan te trekken. Maar gaat de nodige kennis dan niet verloren?
 
