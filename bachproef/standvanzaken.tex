@@ -7,14 +7,95 @@
 
 % Pas na deze inleidende paragraaf komt de eerste sectiehoofding.
 
-Dit hoofdstuk bevat je literatuurstudie. De inhoud gaat verder op de inleiding, maar zal het onderwerp van de bachelorproef *diepgaand* uitspitten. De bedoeling is dat de lezer na lezing van dit hoofdstuk helemaal op de hoogte is van de huidige stand van zaken (state-of-the-art) in het onderzoeksdomein. Iemand die niet vertrouwd is met het onderwerp, weet nu voldoende om de rest van het verhaal te kunnen volgen, zonder dat die er nog andere informatie moet over opzoeken \autocite{Pollefliet2011}.
+In dit hoofdstuk wordt getracht een beeld te schetsen van de huidige stand van de mainframe industrie met betrekking tot automatisatie, modernisatie en een reeds bestaande vergelijking van Rexx en Python. Er volgt een gedetailleerde uitleg over de geschiedenis en het gebruik van mainframes. Daarna wordt dieper ingegaan op automatisatie en scripting, en welke technologieën daarvoor (kunnen) worden gebruikt op mainframe. Vervolgens wordt een overzicht gegeven van de verschillende aspecten van modernisatie. Als laatste wordt vanuit bestaande literatuur een samenvatting gegeven over welke voor- en nadelen van Rexx en Python reeds zijn aangetoond.
 
-Je verwijst bij elke bewering die je doet, vakterm die je introduceert, enz.\ naar je bronnen. In \LaTeX{} kan dat met het commando \texttt{$\backslash${textcite\{\}}} of \texttt{$\backslash${autocite\{\}}}. Als argument van het commando geef je de ``sleutel'' van een ``record'' in een bibliografische databank in het Bib\LaTeX{}-formaat (een tekstbestand). Als je expliciet naar de auteur verwijst in de zin (narratieve referentie), gebruik je \texttt{$\backslash${}textcite\{\}}. Soms is de auteursnaam niet expliciet een onderdeel van de zin, dan gebruik je \texttt{$\backslash${}autocite\{\}} (referentie tussen haakjes). Dit gebruik je bv.~bij een citaat, of om in het bijschrift van een overgenomen afbeelding, broncode, tabel, enz. te verwijzen naar de bron. In de volgende paragraaf een voorbeeld van elk.
+\section{Wat is een mainframe?}
 
-\textcite{Knuth1998} schreef een van de standaardwerken over sorteer- en zoekalgoritmen. Experten zijn het erover eens dat cloud computing een interessante opportuniteit vormen, zowel voor gebruikers als voor dienstverleners op vlak van informatietechnologie~\autocite{Creeger2009}.
+Het is nodig om te verduidelijken dat als in deze bachelorproef wordt gesproken over mainframe, dat daarmee de IBM Z Mainframe wordt bedoeld. Hoewel mainframes meestal aan IBM worden gekoppeld, is het belangrijk te verduidelijken dat zij niet het enige bedrijf zijn die mainframes aanbieden. Deze bachelorproef beperkt zich echter enkel tot de IBM Z Mainframe. Dat wil niet zeggen dat de conclusies uit de bachelorproef niet ook op de andere mainframes van toepassing zijn, maar enkel dat er geen rekening is gehouden met deze andere bedrijven bij het schrijven van de bachelorproef.
 
-Let er ook op: het \texttt{cite}-commando voor de punt, dus binnen de zin. Je verwijst meteen naar een bron in de eerste zin die erop gebaseerd is, dus niet pas op het einde van een paragraaf.
+In een artikel van IBM beschrijven \textcite{Susnjara2024} mainframes als volgt:
 
+`At their core, mainframes are high-performance computers with large amounts of memory and data processors that process billions of simple calculations and transactions in real-time. A mainframe computer is critical to commercial databases, transaction servers and applications that require high resiliency, security and agility.'
+
+\subsection{Geschiedenis}
+De geschiedenis van mainframes gaat heel ver terug. Door de jaren heen zijn er veel veranderingen aan de architectuur van de mainframes gedaan. Een voorbeeld daarvan is de mogelijkheid om te virtualiseren, wat ervoor zorgt dat hardware efficiënter kan worden gebruikt. Met elke nieuwe mainframe generatie worden tal van nieuwe verbeteringen en nieuwe features uitgebracht \autocite{Jacobi2020}. Zo zorgt IBM ervoor dat hun machines kunnen beantwoorden aan de voortdurend evoluerende eisen van hun klanten. Zaken zoals fraude detectie met de hulp van artificiële intelligentie of quantum-safe, waarbij data wordt beschermd als voorzorgsmaatregel tegen de opkomst van quantum computers, zijn sinds de IBM z16 (de naam van de mainframe machine) beschikbaar \autocite{Stine2022,NgoYe2018}.
+
+Naast de evolutie van de hardware en de ontwikkeling van nieuwe functies, is er ook een evolutie in hoe mainframers omgaan met de technologie, en met nieuwe technologieën buiten het mainframe. Zo deed het OMP (Open Mainframe Project) een vergelijkende studie van drie mainframe-georiënteerde programmeertalen met drie modernere programmeertalen \autocites{OMPMWG2024}. Daaruit bleek dat sommige moderne talen de mogelijkheid bieden om oudere talen te vervangen. Ook zijn er verschillende mainframers die het gebruik van modernere technologieën promoten en wijzen op de voordelen die dit kan brengen \autocites{Gilio2021}. Deze evolutie van het mainframe naar het gebruik van moderne programmeertalen en technologieën, ook buiten het mainframe, noemt men de modernisatie golf. Dit komt later nog aan bod.
+
+\subsection{Gebruik}
+Mainframes worden voornamelijk gebruikt door grote bedrijven, zoals banken, vliegmaatschappijen en groothandelaars. Die bedrijven verwerken enorme hoeveelheden data, en moeten elke dag enorm veel transacties correct verwerken. Er worden naar schatting dagelijks in totaal 30 miljard transacties uitgevoerd op mainframes, verdeeld onder de duizenden bedrijven die mainframes gebruiken \autocites{NgoYe2018}. De reden dat mainframes zoveel worden gebruikt door deze grote bedrijven is omdat mainframes, door hun unieke architectuur en bouw, bijna voortdurend blijven draaien. Zowel tijdens de drukste kerstperiodes, als om drie uur in de nacht moeten mensen betalingen kunnen uitvoeren.
+
+\section{Automatisatie}
+%TODO
+\subsection{Wat is automatisatie?}
+Automatisatie (onderzoek) kan als volgt worden beschreven:
+
+“Automation research emphasizes efficiency, productivity, quality, and reliability, focusing on systems that operate autonomously, often in structured environments over extended periods, and on the explicit structuring of such environments.” \autocite{Goldberg2012}
+
+Automatisatie wordt niet enkel gebruikt in IT, maar het is er wel fel aanwezig. Dat komt doordat men met de hulp van automatisatie manuele taken kan uitvoeren door een programma, waardoor er meer tijd vrijkomt voor andere zaken. Automatisatie is zeker met de opkomst van virtualisatie belangrijk geworden. Virtualisatie is wanneer een server (typisch een x86 server) wordt opgesplitst in meerdere kleine servers, om zo optimaal gebruik te kunnen maken van de beschikbare resources. Om elke nieuwe kleinere server op te zetten met zijn eigen systeem, zouden elke keer dezelfde commando’s moeten worden uitgevoerd per server. Om dat te vermijden kan dat proces worden geautomatiseerd. Om ervoor te zorgen dat dit op een kwaliteitsvolle en betrouwbare manier gebeurt, kan men scripts maken, waarin met behulp van logica verschillende scenario's die zich kunnen voordoen, worden behandeld. Dit is slechts een simpel voorbeeld, maar het geeft een idee van de mogelijkheden van automatisatie.  (Interview met Bobby)
+
+\subsection{Automatisatie op mainframe}
+Aangezien mainframes enkele jaren ouder zijn dan de typische consument gerichte computers, is het niet onlogisch dat automatisatie op het mainframe ook een zekere voorsprong had. Als men op het mainframe spreekt over automatisatie denkt men eerst en vooral aan zogeheten “batch jobs”. \textcites{Powell2024} beschrijft batch jobs als 'any regularly occurring automated process that groups similar tasks and performs them automatically without needing to be prompted by human interaction'. 
+
+Powell legt uit dat er grote voordelen zijn aan het gebruiken van batch jobs. Een van die voordelen is het verminderen van fouten door gebruikers, omdat de interactie met gebruikers wordt verminderd tot een minimum. Een ander voordeel van batch jobs is dat ze kunnen worden uitgevoerd op een moment ideaal voor het bedrijf. Meestal worden zulke batch jobs aan het begin of einde van de werkdag uitgevoerd, afhankelijk van hun functie. Ook worden batch jobs vaak ‘s nachts uitgevoerd, wanneer het systeem voor de rest minieme gebruikers input verwacht. Denk aan een bank die doorheen de dag voortdurend bezig is met allerhande klantgerichte zaken. Die bank kan dan ‘s nachts, wanneer de meeste mensen geen betalingen aan het uitvoeren zijn, batch jobs uitvoeren, zonder dat klanten enige vertraging merken op het systeem door de hoge werkkracht die batch jobs vragen. Om zulke batch jobs in te plannen, ook wel scheduling genoemd, wordt er op het mainframe veel gebruikgemaakt van JCL(Job Control Language). JCL komt later nog aan bod in één van de use cases van deze paper (Interview met Bobby).
+Naast batch jobs en JCL, worden er op het mainframe ook scripts geschreven om routinematige taken te automatiseren. Voorbeelden hiervan zijn het aanmaken van gebruikers, het uitdelen van rechten, het behandelen van berichten op de log, en meer. Het schrijven van deze scripts gebeurt in grote mate via JCL en REXX, afhangende van de gewenste functie.(Interview met Bobby)
+
+\subsection{Scripting}
+Zowel JCL, Rexx worden omschreven als scripting talen. Scripting is een bepaalde vorm van programmeren. Een script is een programma dat vooral dient als een soort lijm tussen andere programma’s in plaats van dat het zelf veel functionaliteit toevoegt. Bij het schrijven van een script gaat men ervan uit dat er reeds bestaande programma’s met functionaliteiten bestaan, en verbindt deze met elkaar. Neem bijvoorbeeld een COBOL programma dat een gebruiker geld van zijn rekening laat afhalen. Dat is een functionaliteit. Maar om deze functionaliteit te doen werken, moet de gebruiker ook zijn saldo kunnen bekijken, wat in een ander COBOL programma zit. Een Rexx script kan daarvoor worden gebruikt om de twee COBOL programma’s aan elkaar te linken. \textcite{Ousterhout1998} legt uit dat scripting gebruik maakt van een andere manier van code schrijven, zonder types, wat het simpeler maakt om verschillende componenten met elkaar te verbinden, met minder restricties. Hij voorspelde dat de populariteit van scripting in de toekomst enkel zou stijgen. Dit omdat er al enorme vooruitgang was geboekt op vlak van talen. Daarnaast zou de verbeterde snelheid van computers ervoor zorgen dat de tragere scripting talen meer kansen zouden krijgen, omdat het verschil in snelheid met andere efficiëntere systeem talen, zoals assembler, minder impact zou hebben op de totale snelheid van een programma. Of beide argumenten evenveel hebben bijgedragen tot de groei van scripting, is niet voor deze bachelorproef om te stellen. Maar over de groei van scripting en automatisatie is geen twijfel mogelijk. Als laatste argument stelt \textcite{Ousterhout1998} dat de leercurve van een scripting taal vrij klein is vanwege de vaak vrij simpele syntax. Dit zorgt ervoor dat er een grotere community ontstaat, waardoor de scripting talen nog beter en populairder worden. Dit is een fenomeen dat zich heeft voorgedaan bij Python, een moderne scripting taal, die later in dit hoofdstuk nog aan bod komt \autocite{Lindstrom2005}.
+
+\subsection{Geschiedenis van Rexx}
+Rexx is begonnen als een hobby project door Mike Cowlishaw in 1979. Rexx was oorspronkelijk gemaakt om de nog oudere EXEC en diens opvolger EXEC2 te vervangen. Deze talen waren een van de eerste automatisatie talen. EXEC2 werd gebruikt om verschillende commando’s te bundelen in een script, zodat de programmeur deze commando’s niet manueel moest ingeven. Initieel hadden deze scripts een kleine hoeveelheid logica. Logica in een script zorgt er bijvoorbeeld voor dat bepaalde commando’s al dan niet worden uitgevoerd, naargelang eerdere commando's al dan niet succesvol werden uitgevoerd. Die logica werd door de jaren heen groter en complexer. Daar kwamen de limieten van EXEC2 naar boven. Het gebruik van de taal werd te groot voor waar het voor gemaakt was \autocites{Cowlishaw1994}. Een deel van die limiet was ook de leesbaarheid van de code. Omdat er initieel weinig logica werd verwacht in de code, zijn er bepaalde syntaxiskeuzes gemaakt die, hoewel perfect leesbaar door de computer, niet zo goed leesbaar waren voor programmeurs. De bedoeling van Rexx was om een nieuwe scripting taal te creëren die zowel krachtig als gebruiksvriendelijk is, zodat beide bovenstaande limieten zouden worden opgelost. Enkele voorbeelden van hoe de taal gebruiksvriendelijker werd gemaakt zijn bijvoorbeeld de relatief kleine instructieset, de case-insensitivity, en het uitblijven van speciale karakters. Deze kleine tweaks zorgen ervoor dat de taal gemakkelijk is aan te leren, dat programmeurs zich niet voortdurend moeten bezighouden met syntax, en dat het veel gemakkelijker is om andermans code te begrijpen en onderhouden \autocites{Cowlishaw1984}. Rexx werd snel populair, en dankzij feedback kon de taal snel worden aangepast aan de hand van de noden van gebruikers. Dat was tenslotte het doel van Cowlishaw, om een scripting taal te maken die eerst en vooral gebruiksvriendelijk was. Sinds 1982 is Rexx blijven evolueren. Zo is het beschikbaar op bijna alle besturingssystemen en wordt er nog steeds elk jaar een Rexx symposium georganiseerd. De taal wordt nog steeds wijd gebruikt, voornamelijk op mainframes. Hoewel studies zoals die van \textcites{Winkler2023} suggereren dat Rexx inderdaad gebruiksvriendelijk en gemakkelijker te leren is, wijzen anders studies zoals \textcites{OMPMWG2024} op het feit dat er weinig community support is voor Rexx. Dat gecombineerd met voortdurend evoluerende technologieën binnen en buiten mainframe, zorgen ervoor dat Rexx in populariteit en aantal gebruikers daalt.
+
+\subsection{Andere technologieën}
+\textcite{Thota2020} beschrijft in haar paper de opkomst van cloud, en de stijgende populariteit ervan. Zij beargumenteert dat het daarom nodig is dat bedrijven hun strategie met betrekking tot het automatiseren van processen ook aanpassen aan de veranderende eisen van de infrastructuur. De gegeven suggesties zijn het gebruik van onder andere Terraform, Ansible en Kubernetes. Hoewel de cloud en mainframe twee verschillende systemen zijn, zouden deze technologieën zonder twijfel ook kunnen worden overwogen om bepaalde automatisatie taken van mainframe op zich te nemen. Echter zou het opnemen van die technologieën een volledig nieuwe bachelorproef kunnen omvatten. Daarom worden ze in deze bachelorproef niet verder besproken, maar wordt er in de conclusie wel aangeraden dat verder onderzoek ook deze nieuwe technologieën kan aankaarten in het gesprek over de toekomst van automatisatie op mainframe.
+
+\section{Skills gap}
+%todo
+
+\subsection{Pensioengolf}
+%todo
+
+\subsection{Oude technologie}
+%todo
+
+\subsection{Opleidingen}
+%todo
+
+\section{Community op mainframe}
+%todo
+
+\subsection{Open source}
+%todo
+
+\subsection{Organisaties}
+%todo
+
+\section{Modernisatie}
+%todo
+
+\subsection{Modernisatie op mainframe}
+%todo
+
+\subsection{Opkomst van Python}
+%todo
+
+\section{Rexx vs Python}
+%todo
+
+\subsection{Voordelen Rexx}
+%todo
+
+\subsection{Nadelen Rexx}
+%todo
+
+\subsection{Voordelen Python}
+%todo
+
+\subsection{Nadelen Python}
+%todo
+
+\section{Hoofdstuk voor syntax latex}
+Dit hoofdstuk zit nog in de draft om gemakkelijk aan de syntax te kunnen voor een afbeelding of code in de bachelorproef te steken.
 \begin{figure}
   \centering
   \includegraphics[width=0.8\textwidth]{grail.jpg}
@@ -32,7 +113,6 @@ Let er ook op: het \texttt{cite}-commando voor de punt, dus binnen de zin. Je ve
   \caption[Voorbeeld codefragment]{Voorbeeld van het invoegen van een codefragment.}
 \end{listing}
 
-\lipsum[7-20]
 
 \begin{table}
   \centering
