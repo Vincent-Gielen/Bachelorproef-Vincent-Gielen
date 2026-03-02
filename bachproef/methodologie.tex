@@ -4,6 +4,7 @@
 
 \chapter{\IfLanguageName{dutch}{Methodologie}{Methodology}}%
 \label{ch:methodologie}
+Om de onderzoeksvraag te beantwoorden worden vijf deelvragen beantwoord: (a) Waarom is er nood aan modernisatie van mainframes?; (b) Wat doet automatisatie op mainframes?; (c) Wat zijn de voor- en nadelen van Rexx?; (d) Wat zijn de voor- en nadelen van Python op z/OS?; (e) In hoeverre kan Python nu al Rexx vervangen? De vijf deelvragen worden benaderd via twee onderzoekstechnieken: een literatuurstudie en een vergelijkende studie. De onderzoekstechnieken bestaan uit verschillende stappen die verdeeld zijn in drie fases. De eerste fase is de literatuurstudie, die biedt een antwoord op de eerste twee deelvragen, en legt de basis voor deelvragen 3 en 4. De tweede fase is een requirementsanalyse. Die helpt met (1) het identificeren van veelgebruikte functionaliteiten en use cases waarmee Rexx en Python kunnen worden vergeleken; (2) criteria waaraan beide talen moeten voldoen. Tot slot, in de derde fase, volgen de PoC's van elke use case, die samen meer inzicht geven in de voor- en nadelen van beide talen (deelvraag 3 en 4), en die een antwoord bieden op de vraag of Python nu al Rexx kan vervangen (deelvraag 5).
 
 %% TODO: In dit hoofstuk geef je een korte toelichting over hoe je te werk bent
 %% gegaan. Verdeel je onderzoek in grote fasen, en licht in elke fase toe wat
@@ -26,5 +27,19 @@
 %% Maak voor elke fase (behalve het literatuuronderzoek) een NIEUW HOOFDSTUK aan
 %% en geef het een gepaste titel.
 
-\lipsum[21-25]
+\section{Literatuurstudie}
+In de literatuurstudie wordt getracht om een overzicht te geven van de huidige situatie in het veld van mainframe. Daarvoor wordt er eerst naar het verleden gekeken en hoe Rexx zo een grote scripting taal van mainframe is geworden. Daarna wordt er gekeken naar de opkomst van Python en zijn populariteit. Uiteindelijk wordt een analyse gedaan van bestaand onderzoek dat de twee talen vergelijkt. Deze vergelijking, waaruit blijkt dat beide talen hun voor- en nadelen hebben, vormt de basis van het verdere onderzoek in deze bachelorproef.
 
+\section{Requirementsanalyse}
+Een requirementsanalyse wordt uitgevoerd om te bepalen welke veelgebruikte functies en use cases worden gebruikt om de vergelijking tussen Rexx en Python te maken. Daarnaast worden in deze fase de succescriteria bepaald waaraan beide talen worden getoetst, om zo tot een conclusie te komen over de beste optie van de twee voor elke use case. Om de best mogelijke use cases en succescriteria te bepalen worden verschillende interviews afgenomen met ervaren systeemprogrammeurs, en wordt een vragenlijst worden opgesteld om een brede input te krijgen van mensen in het werkveld. Nadien wordt er met behulp van de MoSCoW-methode een duidelijk beeld geschetst van de vereisten waaraan beide talen moeten voldoen om te slagen in een use case. Zo wordt de voorkeur voor één van de twee talen in die specifieke use case bepaald. 
+
+\subsection{Interviews}
+De interviews worden afgenomen met ervaren systeemprogrammeurs. De informatie uit de interviews wordt gebruikt een goed beeld te krijgen van hoe mainframers de modernisatie op het mainframe ervaren, alsook om input te krijgen over de use cases die worden gekozen voor de PoC en de requirements voor beide talen.
+
+De uitgeschreven interviews zijn opgenomen in de bijlages \ref{ch:Interviews}. %todo
+
+\subsection{Enquête}
+De enquête wordt opgesteld met het doel om input te krijgen van zoveel mogelijk systeemprogrammeurs, en dit met een lage barrière. Vooral de succes criteria worden bevraagd in de enquête, aangezien daar verschillende meningen over kunnen zijn, en deze bachelorproef en objectief onderzoek wil uitvoeren. De enquête wordt gedeeld in de eerder vermelde Discord community van 'System Z Enthusiasts'. De enquête is te vinden in de bijlage \ref{ch:Enquête}.
+
+\section{Proof-of-Concept}
+In de Proof-of-Concept wordt de vergelijkende studie uitgevoerd. Hierbij worden verschillende kleinere PoC's opgesteld aan de hand van de eerder bepaalde requirements. Er worden verschillende use cases uitgewerkt, om zo een breed beeld te krijgen van de verschillen tussen beide talen, met elk hun sterktes en zwaktes. Zo kunnen er use cases worden uitgewerkt waar de ene taal een duidelijk voordeel heeft t.o.v. de andere. Naast deze uitersten worden er ook enkele use cases uitgewerkt waarbij de voorkeur voor Python of Rexx minder duidelijk is. Bij elke PoC wordt beargumenteerd waarom dit een belangrijke use case is, en wat de succes criteria zijn waaraan een oplossing moet voldoen.
