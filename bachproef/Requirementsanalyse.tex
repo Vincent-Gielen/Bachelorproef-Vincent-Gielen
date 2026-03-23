@@ -12,4 +12,21 @@ De bedoeling van de enquête was om zoveel mogelijk input te verkrijgen van de m
 
 \section{Selectie}
 
-Zoals vermeld zijn er vrij veel requirements en use cases verzameld om dit onderzoek uit te voeren. Uit deze verzameling is een selectie gemaakt om verder te gaan. Deze selectie is gebeurd op basis van verschillende criteria. Voor zowel de use cases als requirements geldt dat het mogelijk moet zijn om uit te voeren zonder toegang tot een productie systeem. Dit zorgt ervoor dat alles te maken met CPU consumptie, snelheid of algemene performantie niet mogelijk is. Daarnaast zijn subjectieve succescriteria, en use cases die buiten de scope van de huidige vergelijking vallen, ook niet meegenomen in de laatste selectie. Hieronder wordt een overzicht gegeven van de use cases en requirements die zullen worden gebruikt in het hoofdstuk van proof-of-concept.
+Zoals vermeld zijn er vrij veel requirements en use cases verzameld om dit onderzoek uit te voeren. Uit deze verzameling is een selectie gemaakt om verder te gaan. Deze selectie is gebeurd op basis van verschillende criteria. Voor zowel de use cases als requirements geldt dat het mogelijk moet zijn om uit te voeren zonder toegang tot een productie systeem. Dit zorgt ervoor dat alles te maken met CPU consumptie, snelheid of algemene performantie niet mogelijk is. Daarnaast zijn subjectieve succescriteria, en use cases die buiten de scope van de huidige vergelijking vallen, ook niet meegenomen in de laatste selectie. Hieronder wordt een overzicht met uitleg gegeven van de use cases en requirements die zullen worden gebruikt in het hoofdstuk van proof-of-concept.
+
+\subsection{Use cases}
+De use cases die als PoC's zullen worden uitgevoerd, zijn de volgende:
+\begin{itemize}
+    \item Het genereren van JCL. Dit kan worden gedaan met Python door gebruik te maken van de Jinja2 package. Met Rexx kan dat worden gedaan met behulp van ISPF skeletons.
+\end{itemize}
+
+\subsection{Requirements}
+De requirements die uit de selectie het meest haalbaar en objectief meetbaar zijn, zijn de volgende:
+\begin{itemize}
+    \item Herbruikbaarheid van de code
+    \item Robuustheid van de code
+    \item Integratie met mainframe tools
+    \item Ondersteuning van de taal
+    \item Security vulnerabilities
+    \item Integratie met tools buiten het mainframe
+\end{itemize}
