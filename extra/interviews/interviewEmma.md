@@ -68,3 +68,28 @@ invoking stuff in a different way with python. api thing is a real problem for p
   - Nieuwe bouw: Alles wat nieuw wordt ontwikkeld, zal in moderne talen zoals Python gebeuren.
 
 Kortom: REXX wordt een specialistische taal voor specifieke systeemtaken, terwijl Python de brede motor wordt voor automatisering en innovatie op het platform.
+
+## Interview uitgeschreven
+
+What are Rexx and Python used for on Mainframe in your point of view?
+
+Rexx is used for security only because it's mandatory in that use. in defined custom fields for data validation. you have to program rexx for that.
+Python for automation, for access to the user environment.
+One-off Rexx scripts are used by some, same with python. I do that with python.
+A huge benefit of Python is access to "argparse", while rexx is hard coded.
+
+How about in security, which is your field of expertise?
+
+Rexx isn't very good in RACF. Python has so many built-in utilities.
+
+Many people are worried about the dependency problem with Python. So many external libraries can cause security issues, as well as the possibility for different teams using different versions of a package.
+
+Having access to more tools isn't a bad thing. To put it blunt: If you don't know how to use it, you shouldn't touch it. It's always best to avoid unnecessary dependencies. You should always check the Python standard library first. If it's not in the standard library, you could try to find an established external package. If there is a big community, changes are it's probably fine. In the worst case, you can build it yourself, which is a lot easier to do in Python than in Rexx. So even if there is no 3rd party languages, core Python is still great.
+
+So how do you see the future of Automation (languages) on the mainfrane platform?
+
+In the next 20 years we won't see Rexx or Clist go away. But if somebody wants to build something new, it will, or should be, in python. Maintaining new languages is so much easier. There is not as much code, so not like cobol, which will stay. but building infrastructure (automation) will be new languages.
+data science/analysis, one off financial reports. those people know python, not older languages.
+python is more fully featured. all sorts of stuff built in that rexx doesn't have. even converting is way easier in python. rexx is so much tougher, defeats the purpose of scripting. python used to be slower, it has gotten faster
+
+invoking stuff in a different way with python. api thing is a real problem for python. zoau is constantly adding more further. it's growing. the good thing about being early is you won't have to do a lot when it turns big
