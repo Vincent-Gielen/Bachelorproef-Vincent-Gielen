@@ -105,10 +105,10 @@ SECTIONS: Final[dict[str, tuple[str, list[ItemCount]]]] = {
 }
 
 OUTPUT_FILENAMES: Final[dict[str, str]] = {
-    "requirements": "shortlist_requirements.png",
-    "use_cases": "shortlist_use_cases.png",
-    "dont_do": "shortlist_dont_do.png",
-    "literature_processing": "shortlist_literature_processing.png",
+    "requirements": "shortlist-requirements.png",
+    "use_cases": "shortlist-use-cases.png",
+    "dont_do": "shortlist-dont-do.png",
+    "literature_processing": "shortlist-literature-processing.png",
 }
 
 
