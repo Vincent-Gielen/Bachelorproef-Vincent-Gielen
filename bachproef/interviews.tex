@@ -1,2 +1,29 @@
 \chapter{Interviews}%
 \label{ch:Interviews}
+
+\section{Interview met Emma Skovgård}
+\label{InterviewEmma}
+
+\section{Interview met Bobby Tjassens}
+\label{InterviewBobby}
+\textbf{Vincent: Wat is jouw blik op de geschiedenis van automation op Z?}
+
+
+Bobby:
+Ik ben begonnen in 1998, zo'n beetje rond de tijd dat het mainframe voor 't eerst voorspeld werd end of life te zijn (zal je niet verbazen: is niet uit is gekomen). Dat was ook de tijd dat client-server zijn opkomst had. Voor die tijd was het mainframe, voor de bedrijven die er eentje hadden, ook meteen het énige dat ze hadden. Het mainframe stond volledig op zichzelf, alles wat nodig was draaide op diezelfde box en ondanks dat er toen nog niemand gehoord had van automation, was automation volop aanwezig. Daarmee bedoel ik vooral scheduling van jobs (JCL) en scripts voor routinematige taken (opvoeren users, uitdelen rechten, afhandeling van messages op de log door system automation, compileren en link-edit van applicatie programma's, etc.).
+
+Client-server was de benaming voor de exponentiële groei van X86 servers met applicaties en grafische user interfaces. Veel van die applicaties hadden behoefte aan de data op het mainframe en dat veroorzaakte een grote verschuiving van online transactieverkeer van terminal based naar service oriented. Ondanks dat het mainframe niet langer volledig op zichzelf stond (want zonder de X86 componenten = geen applicatie voor de eindgebruiker) bleef het mainframe het grotendeels "op z'n mainframes" doen. Dit was een tijd van veel arrogatie op het mainframe, de X86 betrokkenen hebben veel problemen ervaren die het mainframe misschien jaren geleden ook had, maar al geruime tijd had opgelost (op hun eigen manier). Er was naar mijn mening maar weinig kruisbestuiving, hooguit in de vorm van cross-platform scheduling (waarbij mainframe de regie nam).
+
+Met de komst van server virtualisatie is de exponentiële groei van X86 nog een factor groter geworden en ik denk dat, wat we vandaag de dag verstaan onder "automation", toen geboren is omdat het simpelweg te tijdrovend werd om elke server handmatig te bouwen, in te richten en in gebruik te nemen. Intussen groeide daarnaast een scala aan wereldwijde communities waarin veel online gedeeld werd. De arrogatie op Z bleef, terwijl ik denk dat we toendertijd al veel van elkaar hadden kunnen leren. Veel automation op X86 was niet van toepassing op Z (wij rollen niet tientallen nieuwe LPARs uit per week), maar een heleboel was wel degelijk ook interessant op Z. Denk aan test automation, automated deployment, observability (al heette dat toen nog niet zo), etc.
+
+Intussen stond automation op Z natuurlijk niet stil, het mainframe is vrolijk door gegaan met meer scripting, o.a. ook voor die zaken waar X86 op hun manier mee bezig waren, maar tot aan (naar mijn mening) dit 'tijdstip' was dat met de middelen traditioneel aanwezig op Z, dus JCL, REXX, en een greep aan meer exotische programmeertalen.
+'Tijdstip' tussen aanhalingstekens want zoiets gaat geleidelijk natuurlijk, maar ergens rond deze tijd zijn een aantal processen 'ingehaald' door de boze buitenwereld. Aan bepaalde ideeën/processen/technologieën is simpelweg buiten Z door zó veel meer mensen gesleuteld, die communities zijn gewoon zó veel groter, dat bepaalde wereldwijde standaarden vanzelf ontstaan, een dat zijn er geen die op Z zijn geboren.
+
+Vanaf nu moet het mainframe op sommig gebied achter anderen aan hollen. Begrijp me niet verkeerd, ik denk tot op de dag van vandaag dat het mainframe een verdiende eerste plek heeft in large enterprises en dat veel potentie onbenut blijft, maar de wereld om het mainframe heen is inmiddels fundamenteel veranderd en wij bewegen (te) langzaam mee.
+
+De afgelopen jaren zie je dat voor die bepaalde processen/technologieën de rollen zijn omgedraaid en het mainframe moet volgen. Denk aan centrale logging in Splunk, denk aan standaard messaging als Kafka, denk aan Git en Azure/DevOps (of vergelijkbaar), denk aan Ansible, denk aan OpenAPI en denk nu recentelijk aan AI. Het gaat dus (vind ik) verder dan alleen het feit dat de volgende generatie onbekend is met de mainframe manier van werken, ik ben overtuigd dat sommige oplossing buiten Z echt béter zijn.
+
+Het effect op automation is dat onderdelen van de automation op Z moet integreren met de buitenwereld. Dat kan betekenen dat de scripting op Z van buitenaf aanroepbaar moet zijn, maar ook andersom, dus dat Z zelf calls naar buiten de Z-omgeving moet doen en in beide gevallen moeten wij ons conformeren aan de protocollen/interfaces van buitenaf. Tegelijkertijd heeft het mainframe wel z'n reputatie hoog te houden als stabiel platform waarop (bijna) alles blijft draaien wat jaren geleden is ontwikkeld. Je kunt dus niet zo maar even alles omgooien. Hierin past jouw onderzoek als gegoten want ik denk dat sommige bedrijven best wel worstelen met waar die grens dan precies ligt. Al je scripting weggooien en opnieuw schrijven in Python is te kostbaar (en ondoenlijk), dus concentreert zich dat herschrijven denk ik op het snijvlak met andere platformen.
+
+Soms benijd ik de nieuwe generatie wel eens vanwege de rijke omgeving waarin ze terecht komen. En soms heb ik compassie met ze omdat ik zelf al af en toe moeite heb nieuwe technologieën maar te blijven opstapelen op wat ik al weet, en de dat is waar de nieuwelingen vandaag starten. Daarom is het belangrijk dat we als Z platform bepaalde keuzes wél zwart-wit maken en afscheid nemen van bepaalde, soms verouderde, technologieën, al is het maar om het brede scala aan tools en talen voor een doorsnee mens behapbaar te houden. We hebben dus nood aan standaardisatie over Z shops heen zodat iemand die bij mainframe site A heeft gewerkt ook bij B, C en D kan werken.
+Desondanks vind ik dat zowel REXX als Python (voorlopig) een plek in die standaard gereedschapskist moeten hebben.

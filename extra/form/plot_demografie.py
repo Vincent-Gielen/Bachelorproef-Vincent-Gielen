@@ -19,10 +19,15 @@ COLUMNS_TO_ANALYZE: Final[list[str]] = [
     "What is your experience level with Rexx?",
 ]
 
+PERSONAL_INFO_COLUMN: Final[str] = (
+    "Feel free to share your personal information (name, role, company, ...). This is not mandatory."
+)
+
 OUTPUT_FILENAMES: Final[dict[str, str]] = {
     "mainframe_experience": "demografie-mainframe-experience.png",
     "python_experience": "demografie-python-experience.png",
     "rexx_experience": "demografie-rexx-experience.png",
+    "personal_info_share": "demografie-personal-info-share.png",
 }
 
 # Custom sort order for each field (from smallest/least to largest/most)
@@ -44,6 +49,10 @@ SORT_ORDER: Final[dict[str, list[str]]] = {
         "Intermediate",
         "Advanced",
         "Expert",
+    ],
+    "personal_info_share": [
+        "Filled",
+        "Empty",
     ],
 }
 
@@ -89,6 +98,24 @@ def _read_excel_data() -> dict[str, list[ItemCount]]:
             data[section_key] = items
         else:
             print(f"Warning: Column '{column_name}' not found in Excel file")
+
+    # Handle personal information share field separately (filled vs empty)
+    if PERSONAL_INFO_COLUMN in df.columns:
+        values = df[PERSONAL_INFO_COLUMN]
+
+        # Count filled values (non-null, non-empty after trimming) and empty values
+        filled = int(
+            values.apply(lambda v: pd.notna(v) and str(v).strip() != "").sum()
+        )
+        total = int(len(values))
+        empty = total - filled
+
+        data["personal_info_share"] = [
+            ItemCount("Filled", filled),
+            ItemCount("Empty", empty),
+        ]
+    else:
+        print(f"Warning: Column '{PERSONAL_INFO_COLUMN}' not found in Excel file")
 
     return data
 
@@ -169,8 +196,9 @@ def main() -> None:
     # Generate plots
     section_config = {
         "mainframe_experience": "How long have you been working on Mainframes?",
-        "python_experience": "What is your experience level with Python (on z/OS)??",
-        "rexx_experience": "What is your experience level with Rexx??",
+        "python_experience": "What is your experience level with Python (on z/OS)?",
+        "rexx_experience": "What is your experience level with Rexx?",
+        "personal_info_share": "Personal info shared (filled vs empty)",
     }
 
     for section_key, title in section_config.items():
