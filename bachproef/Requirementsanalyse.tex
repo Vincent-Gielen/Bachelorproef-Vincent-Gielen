@@ -48,19 +48,28 @@ Voordat de resultaten van de enquête kunnen worden geanalyseerd, is het essenti
 Zoals vermeld zijn er vrij veel use cases en succescriteria verzameld uit de enquête en interviews. Uit deze verzameling is een selectie gemaakt om verder te gaan. Die selectie is gebeurd op basis van verschillende criteria. Voor zowel de use cases als succescriteria geldt dat het mogelijk moet zijn om ze uit te voeren zonder toegang tot een productie systeem. Dit zorgt ervoor dat alles te maken met CPU consumptie, snelheid of algemene performantie niet mogelijk is. Daarnaast zijn subjectieve succescriteria, zoals lees- en leerbaarheid, niet meegenomen in de laatste selectie. Dit komt mede omdat uit de literatuurstudie is gebleken dat zowel Rexx als Python vrij goed scoren op deze aspecten. Als laatste zijn enkele use cases die buiten de scope van de huidige vergelijking vallen ook achterwege gelaten. Hieronder wordt een overzicht met uitleg gegeven van de use cases en requirements die zullen worden gebruikt in de proof-of-concepts.
 
 \subsection{Use cases}
+\subsubsection{Geselecteerd}
 De use cases die als PoC's zullen worden uitgevoerd, zijn de volgende:
 \begin{itemize}
     \item Het genereren van JCL. Dit kan worden gedaan met Python door gebruik te maken van de Jinja2 package. Met Rexx kan dat worden gedaan met behulp van ISPF skeletons.
     \item Gebruik maken van een API.
 \end{itemize}
 
+\subsubsection{Niet-geselecteerd}
+%todo
+
 \subsection{Requirements}
+\subsubsection{Geselecteerd}
 De requirements die uit de selectie het meest haalbaar en objectief meetbaar zijn, zijn de volgende:
 \begin{itemize}
+    \item Integratie met tools op het mainframe: Het is algemeen bekend dat Rexx op dit vlak een voorsprong heeft op Python. Dit komt natuurlijk omdat Rexx sinds zijn ontstaan is geïntegreerd met het mainframe. Toch is Python hier aan een inhaalbeweging bezig. Projecten zoals de eerder vermelde SEAR en ZOAU dragen bij aan de integratie van Python met het mainframe. Dit blijft echter een pijnpunt voor Python door de grote diversiteit die bestaat op het mainframe.
+    \item Integratie met tools buiten het mainframe: De hele wereld buiten het mainframe is natuurlijk veel te groot om een correcte analyse te doen. Voor dit onderzoek worden de tools buiten het mainframe beperkt tot tools die bijdragen tot applicatieontwikkeling (bijvoorbeeld GIT) en tools die nodig zijn voor keten- of pakketoplossingen (bijvoorbeeld een paswoord ophalen uit CyberArk). 
     \item Herbruikbaarheid van de code
     \item Robuustheid van de code
-    \item Integratie met tools op het mainframe
     \item Ondersteuning van de taal
     \item Security vulnerabilities
-    \item Integratie met tools buiten het mainframe
+    
 \end{itemize}
+
+\subsubsection{Niet-geselecteerd}
+%todo
