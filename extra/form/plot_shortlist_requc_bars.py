@@ -141,7 +141,7 @@ def _plot_one_section(
     ax.invert_yaxis()  # so the smallest count is at the top
 
     ax.set_title(section_title)
-    ax.set_xlabel("Aantal keer verschenen")
+    ax.set_xlabel("Aantal keer voorgesteld")
 
     ax.grid(axis="x", linestyle="--", alpha=0.35)
     fig.tight_layout()
