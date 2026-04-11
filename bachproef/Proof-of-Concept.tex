@@ -1,2 +1,97 @@
 \chapter{Proof-of-Concept}%
 \label{ch:Proof-of-Concept}
+
+\section{PoC 1: Gebruik maken van  een API}
+In deze PoC wordt er getracht om via het mainframe contact te leggen met een API. Er wordt contact gelegd met een private API die op hetzelfde mainframe draait, alsook de publieke API van \href{https://github.com/open-meteo/open-meteo}{open-meteo} om het weer op een bepaalde locatie te verkrijgen. Zo kan er ook gekeken worden of er een verschil is als een API op een mainframe draait of niet.
+
+\subsection{Python}
+\subsubsection{Code}
+In de code van de Python bestanden \ref{mint:privateAPIPython} en \ref{mint:publiekeAPIPython} is het proces hetzelfde. De requests package van Python wordt geïmporteerd. Deze veelgebruikte package zorgt ervoor dat API requests op een simpele manier kunnen worden uitgevoerd. Voor de private API moet er een gebruikers-ID en een wachtwoord worden meegegeven om juist te kunnen aanmelden op de het mainframe. Hiervoor wordt een extra package van Python gebruikt. Voor de publieke API moeten er bepaalde parameters worden meegegeven om de informatie verkrijgen van een bepaalde locatie. Bij de requests package wordt automatisch geverifieerd of de server (het systeem dat wordt aangesproken) wel een veilig is. Dit wordt gedaan aan de hand van internationale standaarden en certificaten. Bij de private API is dit manueel uitgezet, omdat dit extra complexiteit vraagt die geen invloed heeft op de bevindingen. Na de request wordt er een antwoord ontvangen. Als dit antwoord goed is (met de code 200), dan worden de resultaten afgebeeld op het scherm.
+
+\begin{listing} [h]
+    \begin{minted}[frame=lines, framesep=2mm, linenos]{python}
+        # De Python package requests en getpass worden geimporteerd
+        import requests
+        from getpass import getpass
+        
+        # De credentials voor in te loggen worden aan de gebruiker gevraagd en opgeslaan
+        myCreds = ('','')
+        
+        if myCreds[0] == '':
+            userid = input("Give your userid: ")
+            myCreds = (userid,'')
+        
+        if myCreds[1] == '':
+            passwd = getpass("Give your password: ")
+            myCreds = (myCreds[0], passwd)
+        
+        # De URL naar de private API van mainframeyin
+        url = "https://mainframeyin:8092/LWWAPI/API/API"
+        
+        # De credentials worden meegegeven zodat correct kan worden aangemeld
+        # Er wordt niet geverifieerd of deze API veilig is, omdat we deze zelf beheren
+        response = requests.get(url, auth=myCreds, verify=False)
+        
+        if (response.status_code != 200):
+            # Als er iets verkeerd gaat, tonen we dat hier
+            raise Exception(f"{response.status_code} - {response.text}")
+        else:
+            # We verkrijgen de gegevens in JSON formaat
+            ApiList = response.json()
+        
+        # De verschillende API's worden afgebeeld
+        for api in ApiList['API']:
+            print(f"{api}")
+    \end{minted}
+  \caption[Private API op mainframe in Python]{\label{mint:privateAPIPython}Contact leggen met een private API op hetzelfde mainframe met Python}
+\end{listing}
+
+\begin{listing} [h]
+    \begin{minted}[frame=lines, framesep=2mm, linenos]{python}
+        # De Python package requests wordt geimporteerd
+        import requests
+        
+        # De coördinaten voor Madrid
+        params = {
+            "latitude": 40.4168,
+            "longitude": -3.7038,
+            "current_weather": "true",
+            "temperature_unit": "celsius"
+        }
+        
+        # De URL naar de publieke API van open-meteo
+        url = "https://api.open-meteo.com/v1/forecast"
+        
+        # Er zijn hier geen credentials nodig, aangezien de API public beschikbaar is
+        # We geven de parameters mee, zodat we het weer van Madrid krijgen
+        response = requests.get(url, params=params)
+        
+        if response.status_code != 200:
+        raise Exception(f"{response.status_code} - {response.text}")
+        else:
+        # We verkrijgen de gegevens in JSON formaat
+        weather_data = response.json()
+        
+        # We halen enkele gegevens uit de JSON
+        current = weather_data['current_weather']
+        temp = current['temperature']
+        wind = current['windspeed']
+        
+        # Het resultaat wordt afgebeeld
+        print(f"Het weer in Madrid:")
+        print(f"Temperature: {temp}°C")
+        print(f"Wind Speed: {wind} km/h")
+    \end{minted}
+  \caption[Publieke API in Python]{\label{mint:publiekeAPIPython}Contact leggen met een publieke API met Python}
+\end{listing}
+
+\subsubsection{Bevindingen}
+
+\begin{itemize}
+\item Integratie met tools op het mainframe:
+\item Integreatie met tools buiten het mainframe:
+\item Herbruikbaarheid van de code:
+\item Security vulnerabilities:
+\item Robuustheid van de code:
+\item Ondersteuning van de taal:
+\end{itemize}

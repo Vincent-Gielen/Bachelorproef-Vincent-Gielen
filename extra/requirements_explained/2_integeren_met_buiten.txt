@@ -7,4 +7,4 @@ B) Bij interacties met pakket oplossingen denk ik vooral aan zaken als: een inci
 
 Met dit antwoord en de vorige in het achterhoofd kom ik zelf grofweg uit op:
 - als een taak start op het mainframe en die blijft op het mainframe dan kun je met REXX heel veel (bijna alles), met Python minder, maar dat is aan het groeien.
-- als een taak buiten het mainframe start en mainframe dingen moet doen, of op mainframe start en dingen daarbuiten moet doen, dan loop je in REXX al snel tegen een muur.
+- als een taak buiten het mainframe start en mainframe dingen moet doen, of op mainframe start en dingen daarbuiten moet doen, dan loop je in REXX al snel tegen een kmuur.
