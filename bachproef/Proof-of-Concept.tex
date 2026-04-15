@@ -2,11 +2,10 @@
 \label{ch:Proof-of-Concept}
 
 \section{PoC 1: Gebruik maken van  een API}
-In deze PoC wordt er getracht om via het mainframe contact te leggen met een API. Er wordt contact gelegd met een private API die op hetzelfde mainframe draait, alsook de publieke API van \href{https://github.com/open-meteo/open-meteo}{open-meteo} om het weer op een bepaalde locatie te verkrijgen. Zo kan er ook gekeken worden of er een verschil is als een API op een mainframe draait of niet.
+In deze PoC wordt er getracht om via het mainframe contact te leggen met een API. Er wordt contact gelegd met een private API die op hetzelfde mainframe draait, alsook de publieke API van \href{https://github.com/open-meteo/open-meteo}{open-meteo} om het weer in Madrid te verkrijgen. Zo kan er ook gekeken worden of er een verschil is als een API op een mainframe draait of niet, en welke parameters daarvoor moeten worden veranderd.
 
 \subsection{Python}
-\subsubsection{Code}
-In de code van de Python bestanden \ref{mint:privateAPIPython} en \ref{mint:publiekeAPIPython} is het proces hetzelfde. De requests package van Python wordt geïmporteerd. Deze veelgebruikte package zorgt ervoor dat API requests op een simpele manier kunnen worden uitgevoerd. Voor de private API moet er een gebruikers-ID en een wachtwoord worden meegegeven om juist te kunnen aanmelden op de het mainframe. Hiervoor wordt een extra package van Python gebruikt. Voor de publieke API moeten er bepaalde parameters worden meegegeven om de informatie verkrijgen van een bepaalde locatie. Bij de requests package wordt automatisch geverifieerd of de server (het systeem dat wordt aangesproken) wel een veilig is. Dit wordt gedaan aan de hand van internationale standaarden en certificaten. Bij de private API is dit manueel uitgezet, omdat dit extra complexiteit vraagt die geen invloed heeft op de bevindingen. Na de request wordt er een antwoord ontvangen. Als dit antwoord goed is (met de code 200), dan worden de resultaten afgebeeld op het scherm.
+In de code van de Python bestanden \ref{mint:privateAPIPython} en \ref{mint:publiekeAPIPython} is het proces hetzelfde. De requests package van Python wordt geïmporteerd. Deze veelgebruikte package zorgt ervoor dat API requests op een simpele manier kunnen worden uitgevoerd. Voor de private API moet er een gebruikers-ID en een wachtwoord worden meegegeven om juist te kunnen aanmelden op de het mainframe. Hiervoor wordt een extra package van Python gebruikt. Voor de publieke API moeten er bepaalde parameters worden meegegeven om de informatie verkrijgen van een specifieke locatie (hier Madrid). Bij het gebruik van de requests package wordt automatisch geverifieerd of de server (het systeem dat wordt aangesproken) wel veilig is. Dit wordt gedaan aan de hand van internationale standaarden en certificaten. Bij de private API is dit manueel uitgezet, omdat we het systeem kennen, en de certificaten dit voorbeeld onnodig complex zouden maken. Na de request wordt er een antwoord ontvangen. Als dit antwoord goed is (met de code 200), dan worden de resultaten afgebeeld op het scherm.
 
 \begin{listing} [h]
     \begin{minted}[frame=lines, framesep=2mm, linenos]{python}
@@ -33,17 +32,16 @@ In de code van de Python bestanden \ref{mint:privateAPIPython} en \ref{mint:publ
         response = requests.get(url, auth=myCreds, verify=False)
         
         if (response.status_code != 200):
-            # Als er iets verkeerd gaat, tonen we dat hier
             raise Exception(f"{response.status_code} - {response.text}")
         else:
             # We verkrijgen de gegevens in JSON formaat
             ApiList = response.json()
         
-        # De verschillende API's worden afgebeeld
+        # De verschillende API namen worden afgebeeld
         for api in ApiList['API']:
-            print(f"{api}")
+            print(api['APIName'])
     \end{minted}
-  \caption[Private API op mainframe in Python]{\label{mint:privateAPIPython}Contact leggen met een private API op hetzelfde mainframe met Python}
+  \caption[Private API op hetzelfde mainframe in Python]{\label{mint:privateAPIPython}Contact leggen met een private API op hetzelfde mainframe met Python}
 \end{listing}
 
 \begin{listing} [h]
@@ -66,11 +64,12 @@ In de code van de Python bestanden \ref{mint:privateAPIPython} en \ref{mint:publ
         # We geven de parameters mee, zodat we het weer van Madrid krijgen
         response = requests.get(url, params=params)
         
+        # Als er een error is, wordt die hier getoond
         if response.status_code != 200:
-        raise Exception(f"{response.status_code} - {response.text}")
+            raise Exception(f"{response.status_code} - {response.text}")
         else:
-        # We verkrijgen de gegevens in JSON formaat
-        weather_data = response.json()
+            # We verkrijgen de gegevens in JSON formaat
+            weather_data = response.json()
         
         # We halen enkele gegevens uit de JSON
         current = weather_data['current_weather']
@@ -79,13 +78,113 @@ In de code van de Python bestanden \ref{mint:privateAPIPython} en \ref{mint:publ
         
         # Het resultaat wordt afgebeeld
         print(f"Het weer in Madrid:")
-        print(f"Temperature: {temp}°C")
-        print(f"Wind Speed: {wind} km/h")
+        print(f"Temperatuur: {temp} graden Celsius")
+        print(f"Windsnelheid: {wind} km/h")
     \end{minted}
   \caption[Publieke API in Python]{\label{mint:publiekeAPIPython}Contact leggen met een publieke API met Python}
 \end{listing}
 
-\subsubsection{Bevindingen}
+\subsection{Rexx}
+hier komt de uitleg van Rexx
+
+\begin{listing} [h]
+    \begin{minted}[frame=lines, framesep=2mm, linenos]{python}
+        /* REXX */
+        
+        /* De URL naar de private API */
+        url = 'https://mainframeyin:8092/LWWAPI/API/API'
+        
+        /* De credentials voor in te loggen aan de gebruiker vragen */
+        /* We gebruiken PARSE PULL zodat hoofdletters behouden blijven */
+        say "Give your userid: "
+        parse pull userid
+        myCreds.1 = userid
+        
+        say "Give your password: "
+        parse pull passwd
+        myCreds.2 = passwd
+        
+        /* We bouwen het curl commando op:
+        -k : --insecure (vergelijkbaar met verify=False in Python)
+        -u : --user (voor Basic Authentication)
+        */
+        commando = "curl -k -u "myCreds.1":"myCreds.2" '"url"'"
+        
+        /* Voer het Unix commando uit */
+        rc = bpxwunix(commando,,response.,error.)
+        
+        /* Als er een error is, wordt die hier getoond */
+        if rc <> 0 then do
+            say "Error executing curl. Return code:" rc
+            do i = 1 to error.0
+                say error.i
+            end
+            exit 8
+        end
+        
+        /* Verwerking van de JSON response */
+        /* We zoeken naar de APINames in de JSON */
+        ApiList = response.1
+        
+        say "Lijst met API's:"
+        do while pos('"APIName":"', ApiList) > 0
+            /* De verschillende API namen worden afgebeeld */
+            parse var ApiList '"APIName":"' name '"' ApiList
+            say name
+        end
+        
+        exit 0
+        
+    \end{minted}
+    \caption[Private API op hetzelfde mainframe in Rexx]{\label{mint:privateAPIRexx}Contact leggen met een private API op hetzelfde mainframe met Rexx}
+\end{listing}
+
+\begin{listing} [h]
+    \begin{minted}[frame=lines, framesep=2mm, linenos]{python}
+        /* REXX */
+        
+        /* We moeten de parameters in de url steken van de publieke API */
+        url = 'https://api.open-meteo.com/v1/forecast?latitude=40.4168' || ,
+        '&longitude=-3.7038&current_weather=true&temperature_unit=celsius'
+        
+        /* We maken het Unix commando met de publieke API van open-meteo*/
+        commando = "curl '"url"'"
+        
+        /* Dit is een Rexx commando (bpxwunix) om een Unix commando (curl)
+        uit te voeren. Het antwoord komt in response. terecht, enige errors in error.*/
+        rc = bpxwunix(commando,,response.,error.)
+        
+        /* Als er een error is, wordt die hier getoond */
+        if rc <> 0 then do
+            say "Error executing curl. Return code:" rc
+            do i = 1 to error.0
+                say error.i
+            end
+            exit 8
+        end
+        
+        /* We zoeken specifiek binnen de 'current_weather' sectie
+        We snijden de tekst van links naar rechts
+        op zoek naar temperature en windspeed */
+        parse var response.1 'current_weather":{' data '}' .
+        parse var data 'temperature":' temp ','
+        parse var data 'windspeed":' wind ','
+        
+        say "Het weer in Madrid:"
+        say "Temperatuur: " temp "graden Celsius"
+        say "Windsnelheid:" wind "km/h"
+        
+        exit 0
+        
+    \end{minted}
+    \caption[Publieke API in Rexx]{\label{mint:publiekeAPIRexx}Contact leggen met een publieke API met Rexx}
+\end{listing}
+
+\subsection{Bevindingen}
+zie bobby gesprek over tags
+zie discord general-programming over data size met WET en over optie voor curl
+in python moet venv worden geactiveerd
+WET was te moeilijk, dus curl
 
 \begin{itemize}
 \item Integratie met tools op het mainframe:
@@ -93,5 +192,5 @@ In de code van de Python bestanden \ref{mint:privateAPIPython} en \ref{mint:publ
 \item Herbruikbaarheid van de code:
 \item Security vulnerabilities:
 \item Robuustheid van de code:
-\item Ondersteuning van de taal:
+\item Ondersteuning van de taal: Ik moest de codering van het bestand veranderen. Dat kan met > commando's van chat met bobby
 \end{itemize}
