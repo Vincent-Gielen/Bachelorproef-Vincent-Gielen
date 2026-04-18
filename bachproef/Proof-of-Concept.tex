@@ -7,7 +7,7 @@ In deze PoC wordt er getracht om via het mainframe contact te leggen met een API
 \subsection{Python}
 In de code van de Python bestanden \ref{mint:privateAPIPython} en \ref{mint:publiekeAPIPython} is het proces bijna hetzelfde. De \texttt{requests} package van Python wordt geïmporteerd. Deze veelgebruikte package zorgt ervoor dat API requests op een simpele manier kunnen worden uitgevoerd. Voor de private API moet er een gebruikers-ID en een wachtwoord worden meegegeven om juist te kunnen aanmelden op de het mainframe. Hiervoor wordt een extra package van Python gebruikt. Voor de publieke API moeten er bepaalde parameters worden meegegeven om de informatie te verkrijgen over een specifieke locatie (hier Madrid). Bij het gebruik van de requests package wordt automatisch geverifieerd of de server (het systeem dat wordt aangesproken) wel veilig is. Dit wordt gedaan aan de hand van internationale standaarden en certificaten. Bij de private API is dit manueel uitgezet, omdat we het systeem kennen, en de certificaten dit voorbeeld onnodig complex zouden maken. Nadat de request al dan niet succesvol is verstuurd, wordt er een response ontvangen. Als dit antwoord goed is (met de code 200), dan worden de resultaten afgebeeld op het scherm.
 
-\begin{listing} [h]
+\begin{listing} [H]
     \begin{minted}[frame=lines, framesep=2mm, linenos]{python}
         # De Python package requests en getpass worden geimporteerd
         import requests
@@ -44,7 +44,7 @@ In de code van de Python bestanden \ref{mint:privateAPIPython} en \ref{mint:publ
   \caption[Private API op hetzelfde mainframe in Python]{\label{mint:privateAPIPython}Contact leggen met een private API op hetzelfde mainframe met Python}
 \end{listing}
 
-\begin{listing} [h]
+\begin{listing} [H]
     \begin{minted}[frame=lines, framesep=2mm, linenos]{python}
         # De Python package requests wordt geimporteerd
         import requests
@@ -91,15 +91,14 @@ In de code van de Rexx bestanden \ref{mint:privateAPIRexx} en \ref{mint:publieke
 
 Het algemene proces in Rexx is hetzelfde als in Python. Er wordt een request gestuurd naar een API via een url, met enkele parameters of credentials. In de Rexx code moeten de parameters en credentials op handmatige manier toegevoegd worden aan de url voordat we deze kunnen versturen met het curl commando. Het curl commando kan op verschillende manieren worden aangepast aan de noden van de use case, gelijkaardig aan de requests package van Python. Er wordt een stem variabele meegegeven, dit werkt op een gelijkaardige manier als een array, waar de response zal in terechtkomen. Nadat we checken op errors (rc = 0), kunnen we in de response met handige string manipulatie de gewenste resultaten afbeelden.
 
-\begin{listing} [h]
-    \begin{minted}[frame=lines, framesep=2mm, linenos]{python}
+\begin{listing} [H]
+    \begin{minted}[frame=lines, framesep=2mm, linenos]{rexx}
         /* REXX */
         
         /* De URL naar de private API */
         url = 'https://mainframeyin:8092/LWWAPI/API/API'
         
         /* De credentials om in te loggen aan de gebruiker vragen */
-        /* We gebruiken PARSE PULL zodat hoofdletters behouden blijven */
         say "Give your userid: "
         parse pull userid
         myCreds.1 = userid
@@ -143,8 +142,8 @@ Het algemene proces in Rexx is hetzelfde als in Python. Er wordt een request ges
     \caption[Private API op hetzelfde mainframe in Rexx]{\label{mint:privateAPIRexx}Contact leggen met een private API op hetzelfde mainframe met Rexx}
 \end{listing}
 
-\begin{listing} [h]
-    \begin{minted}[frame=lines, framesep=2mm, linenos]{python}
+\begin{listing} [H]
+    \begin{minted}[frame=lines, framesep=2mm, linenos]{rexx}
         /* REXX */
         
         /* We moeten de parameters in de url steken van de publieke API */
@@ -206,4 +205,44 @@ Zoals eerder vermeld, als er iets verandert aan de structuur van de API-output, 
 \item \textbf{Ondersteuning van de taal:} 
 Voor het schrijven van de Python code is weinig werk nodig. Het meest ingewikkelde aspect is het opslaan van de credentials in een tuple. De packages zijn publiek beschikbaar, met een overvloed aan voorbeelden en experten online die informatie geven over het schrijven van de code. Voor de Rexx code daarentegen zijn er minder voorbeelden online. Van IBM is er officiële documentatie over WET, wat veel te complex is voor het simpele voorbeeld in deze use case. Het \texttt{curl} commando wordt vooral aangeraden door gebruikers, en dankzij online documentatie over dit commando, was het schrijven van de Rexx code doenbaar. De samenstelling van het commando door het aaneenplakken van strings is niet vanzelfsprekend en de string manipulatie met de hulp van \texttt{parse var} is, hoewel krachtig, minder intuïtief dan de JSON-objecten in Python.
  
+\end{itemize}
+
+\section{PoC 1: Genereren van JCL}
+Hier schrijven over PoC
+
+\subsection{Python}
+Hier schrijven over Python code
+
+%\begin{listing} [H]
+%    \begin{minted}[frame=lines, framesep=2mm, linenos]{python}
+%    \end{minted}
+%    \caption[Python]{\label{mint:JCLPython}Python voor JCL}
+%\end{listing}
+
+\subsection{Rexx}
+Hier schrijven over Rexx code
+
+%\begin{listing} [H]
+%    \begin{minted}[frame=lines, framesep=2mm, linenos]{rexx}
+%    \end{minted}
+%    \caption[Rexx]{\label{mint:JCLRexx}Rexx voor JCL}
+%\end{listing}
+
+
+\subsection{Bevindingen}
+Extra bevindingen
+
+\begin{itemize}
+    \item \textbf{Integratie met tools op het mainframe:}
+    
+    \item \textbf{Integratie met tools buiten het mainframe:}
+    
+    \item \textbf{Herbruikbaarheid van de code:}
+    
+    \item \textbf{Security vulnerabilities:}
+    
+    \item \textbf{Robuustheid van de code:}
+    
+    \item \textbf{Ondersteuning van de taal:} 
+    
 \end{itemize}

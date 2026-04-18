@@ -1,6 +1,6 @@
 # Commands
 
-verander tag van een file: 
+verander tag van een file:
 `chtag -tc 819 eenscript.py`
 
 verander inhoud van een file naar andere tag en steek het in een andere file:
@@ -8,3 +8,6 @@ verander inhoud van een file naar andere tag en steek het in een andere file:
 
 bekijk dump van een file:
 `od -X filenaam`
+
+activeer virtual environment:
+`. venvv/bin/activate`
