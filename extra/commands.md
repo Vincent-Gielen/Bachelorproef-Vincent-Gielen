@@ -10,4 +10,4 @@ bekijk dump van een file:
 `od -X filenaam`
 
 activeer virtual environment:
-`. venvv/bin/activate`
+`. venv/bin/activate` OR `. venv/Script/activate`

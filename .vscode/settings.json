@@ -119,4 +119,9 @@
         "--shell-escape",
         "%DOC%"
     ],
+    "[rexx]": {
+        "editor.rulers": [
+            80
+        ]
+    },
 }
