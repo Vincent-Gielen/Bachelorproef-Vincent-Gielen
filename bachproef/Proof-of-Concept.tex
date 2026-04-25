@@ -215,30 +215,158 @@ Voor het schrijven van de Python code is weinig werk nodig. Het meest ingewikkel
  
 \end{itemize}
 
-\section{PoC 1: Genereren van JCL}
-Hier schrijven over PoC
+\section{PoC 2: Genereren van JCL}
+In deze PoC wordt er met behulp van skeletons een JCL job gegenereerd. Deze JCL heeft als doel het kopiëren van de members van een PDS(Partitioned DataSet, het equivalent van een folder) naar een andere PDS. Er wordt dus een backup gemaakt. Daarvoor wordt gebruik gemaakt van de IEBCOPY utility van JCL.
 
 \subsection{Python}
-Hier schrijven over Python code
+In de Python code van \ref{mint:JCLPython} wordt gebruik gemaakt van het jinja2 template in \ref{mint:JCLJinjaTemplate}.
 
-%\begin{listing} [H]
-%    \begin{minted}[frame=lines, framesep=2mm, linenos]{python}
-%    \end{minted}
-%    \caption[Python]{\label{mint:JCLPython}Python voor JCL}
-%\end{listing}
+\begin{listing} [H]
+    \begin{minted}[frame=lines, framesep=2mm, linenos]{python}
+        # De Python package os en jinja2 worden geimporteerd
+        import os
+        from jinja2 import Environment, FileSystemLoader
+        
+        # Definieren van de variabelen voor de jinja-substitutie
+        userid  = os.environ.get('USER')
+        srcqual = 'MYLIB.SOURCE'
+        tgtqual = 'MYLIB.BACKUPP'
+        tgtdisp = 'MOD,CATLG,CATLG'
+        
+        # De Jinja2-omgeving instellen en het skeletonbestand
+        # inladen vanuit dezelfde map als het script
+        file_dir = os.path.dirname(os.path.abspath(__file__))
+        env      = Environment(loader=FileSystemLoader(file_dir))
+        template = env.get_template('skeleton.j2')
+        
+        # Het skeleton verwerken en de variabelen substitueren
+        jcl = template.render(userid=userid, srcqual=srcqual, tgtqual=tgtqual, tgtdisp=tgtdisp)
+        
+        # Elke regel afkappen tot maximaal 80 tekens, zoals vereist door JCL
+        jcl = '\n'.join(line.rstrip()[:80] for line in jcl.splitlines())
+        
+        # De gegenereerde JCL wegschrijven naar een USS-bestand in dezelfde map
+        output_file = os.path.join(file_dir, 'backupp.jcl')
+        with open(output_file, 'w') as f:
+        f.write(jcl)
+    \end{minted}
+    \caption[Python voor JCL genereren]{\label{mint:JCLPython}Python code voor het gebruiken van Jinja2 templates voor het genereren van JCL}
+\end{listing}
+
+\begin{listing} [H]
+    \begin{minted}[frame=lines, framesep=2mm, linenos]{JCL}
+        //{{ userid }} JOB 'TEST JOB',CLASS=A,MSGCLASS=N
+        //S010    EXEC PGM=IEBCOPY
+        //SYSPRINT DD SYSOUT=*
+        //INDD     DD DISP=SHR,DSN={{ userid }}.{{ srcqual }}
+        //OUTDD    DD DISP=({{ tgtdisp }}),DSN={{ userid }}.{{ tgtqual }},
+        //            UNIT=SYSALLDA,SPACE=(TRK,(1,1)),
+        //            DCB=(RECFM=FB,DSORG=PO,LRECL=80),DSNTYPE=LIBRARY
+        //SYSIN    DD *
+        COPY INDD=INDD,OUTDD=OUTDD
+        /*
+        
+    \end{minted}
+    \caption[Jinja2 template voor Python]{\label{mint:JCLJinjaTemplate}Het jinja2 template gebruikt door Python}
+\end{listing}
 
 \subsection{Rexx}
-Hier schrijven over Rexx code
+In de Rexx code van \ref{mint:JCLRexx} wordt via ISPF File Tailoring Services gebruik gemaakt van het skeleton \ref{mint:JCLSkeleton}. Er worden vooraf enkele variabelen gedefinieerd. Deze variabelen worden gebruikt om de placeholders(variabelen die beginnen met een '\&') in het skeleton te vervangen. Op die manier moeten voor het opnieuw genereren van de JCL code enkel de variabelen in de Rexx code worden aangepast. Na het definiëren van de variabelen, worden via een ISPF omgeving commando's uitgevoerd om de JCL te genereren. De placeholders worden vervangen, en het resultaat wordt eerst in een tijdelijke dataset gestoken, vooraleer het wordt verplaatst als member \texttt{BACKUPR}naar een PDS genaamd \texttt{GENJCL.JCL}, en die vervangt als die al bestaat. Als laatste worden referenties vrijgegeven om terug naar het startpunt te gaan. Naast de variabelen is het grootste deel van de Rexx code eigenlijk ISPF code, die wordt uitgevoerd in een ISPF omgeving, maar wordt verstuurd vanuit Rexx.
 
-%\begin{listing} [H]
-%    \begin{minted}[frame=lines, framesep=2mm, linenos]{rexx}
-%    \end{minted}
-%    \caption[Rexx]{\label{mint:JCLRexx}Rexx voor JCL}
-%\end{listing}
 
+    \begin{minted}[frame=lines, framesep=2mm, linenos]{rexx}
+        /* REXX */
+        
+        /* Definiëren van de variabelen die zullen worden gebruikt in het skeleton */
+        SLIBDS  = 'GENJCL.ISPSLIB'
+        USERID  = USERID()
+        USERIDJ = USERID
+        if LENGTH(USERIDJ) < 8 then do
+        USERIDJ = USERIDJ || 'A'
+        end
+        SRCQUAL = 'MYLIB.SOURCE'
+        TGTQUAL = 'MYLIB.BACKUPR'
+        TGTDISP = 'MOD,CATLG,CATLG'
+        
+        /* Dit geeft aan naar welke omgeving de volgende commando's 
+        gestuurd moeten worden. In dit geval is dat ISPF*/
+        ADDRESS ISPEXEC
+        
+        /* De bibliotheek waar onze skeleton inzit wordt toegevoegd aan een eventueel
+        reeds bestaande ISPSLIB-definitie van ISPF */
+        "LIBDEF ISPSLIB DATASET ID("SLIBDS") STACK"
+        
+        /* Een tijdelijke sequentiële dataset openen om de JCL in op te slaan. */
+        "FTOPEN TEMP"
+        
+        /* Het SKELETON verwerken en alle variabelen substitueren.
+        De gegenereerde uitvoer wordt weggeschreven naar de tijdelijke dataset */
+        "FTINCL SKELETON"
+        
+        /* De naam van de door ISPF aangemaakte tijdelijke dataset ophalen */
+        "VGET ZTEMPN SHARED"
+        
+        /* De tijdelijke dataset sluiten en de gegenereerde JCL afronden */
+        "FTCLOSE"
+        
+        /* De tijdelijke dataset initialiseren voor gebruik door ISPF.
+        DATAID geeft een referentie (SRCDD) terug voor gebruik in latere commando's */
+        "LMINIT DATAID(SRCDD) DDNAME("ZTEMPN")"
+        
+        /* De doeldataset initialiseren voor gebruik door ISPF.
+        DATAID geeft een referentie (TGTDD) terug voor gebruik in latere commando's */
+        "LMINIT DATAID(TGTDD) DATASET('"USERID".GENJCL.JCL')"
+        
+        /* De gegenereerde JCL kopiëren vanuit de tijdelijke dataset naar lid BACKUPR
+        in de doeldataset, en die vervangt (REPLACE) als die al bestaat */
+        "LMCOPY FROMID("SRCDD") TODATAID("TGTDD") TOMEM(BACKUPR) REPLACE"
+        
+        /* De referentie van de tijdelijke dataset en de doeldataset vrijgeven */
+        "LMFREE DATAID("SRCDD")"
+        "LMFREE DATAID("TGTDD")"
+        
+        /* Onze skeletonbibliotheek uit de ISPSLIB-concatenatie verwijderen */
+        "LIBDEF ISPSLIB"
+    \end{minted}
+    \captionof{listing}{\label{mint:JCLRexx}Rexx code voor het gebruiken van ISPF File Tailoring van JCL skeletons}
+
+\begin{listing} [H]
+    \begin{minted}[frame=lines, framesep=2mm, linenos]{JCL}
+        //&USERIDJ JOB 'TEST JOB',CLASS=A,MSGCLASS=N
+        //S010    EXEC PGM=IEBCOPY
+        //SYSPRINT DD SYSOUT=*
+        //INDD     DD DISP=SHR,DSN=&USERID..&SRCQUAL
+        //OUTDD    DD DISP=(&TGTDISP),DSN=&USERID..&TGTQUAL,
+        //            UNIT=SYSALLDA,SPACE=(TRK,(1,1)),
+        //            DCB=(RECFM=FB,DSORG=PO,LRECL=80),DSNTYPE=LIBRARY
+        //SYSIN    DD *
+        COPY INDD=INDD,OUTDD=OUTDD
+        /*
+    \end{minted}
+    \caption[JCL skeleton voor Rexx]{\label{mint:JCLSkeleton}Het JCL skeleton gebruikt door ISPF File Tailoring met Rexx}
+\end{listing}
+
+\subsubsection{Gegenereerde JCL}
+\begin{listing} [H]
+    \begin{minted}[frame=lines, framesep=2mm, linenos]{JCL}
+        //YVG1A JOB 'TEST JOB',CLASS=A,MSGCLASS=N
+        //S010    EXEC PGM=IEBCOPY
+        //SYSPRINT DD SYSOUT=*
+        //INDD     DD DISP=SHR,DSN=YVG1.MYLIB.SOURCE
+        //OUTDD    DD DISP=(MOD,CATLG,CATLG),DSN=YVG1.MYLIB.BACKUPR,
+        //            UNIT=SYSALLDA,SPACE=(TRK,(1,1)),
+        //            DCB=(RECFM=FB,DSORG=PO,LRECL=80),DSNTYPE=LIBRARY
+        //SYSIN    DD *
+        COPY INDD=INDD,OUTDD=OUTDD
+        /*
+        
+    \end{minted}
+    \caption[Gegenereerde JCL]{\label{mint:GegenereerdeJCL}Het gegenereerde JCL bestand van zowel de Rexx als Python code}
+\end{listing}
 
 \subsection{Bevindingen}
-Extra bevindingen
+Extra bevindingen:
+we slaan de jcl op in een PDS omdat we de code willen analyseren en bekijken. De jcl code zou op zich ook direct kunnen worden uitgevoerd vanuit de code. We moeten een 'A' toevoegen aan de jobnaam omdat ISPF anders klaagt. Daarom doen we dat in de code als de jobnaam kleiner is dan 8. Deze PoC doen we Rexx vanuit ISPF. Het manueel aanpassen van de rexx code is niet gebruiksvriendelijk. Dit zou op zijn beurt ook kunnen worden geautomatiseerd, zodat dat proces gebruiksvriendelijk gebeurt. Kan met ISPF screens? Voor Python is zoau nodig om de jcl aan een dataset toe te voegen, maar de jcl kan worden gesubmit via USS door het submit commando \texttt{submit backupp.jcl}. Het neige verschil in JCL uitkomst is dat Rexx die A nodig heeft, maar Python niet. De python code om de regels voorbij 80 af te kappen is nog onduidelijk -> vragen aan bobby
 
 \begin{itemize}
     \item \textbf{Integratie met tools op het mainframe:}
