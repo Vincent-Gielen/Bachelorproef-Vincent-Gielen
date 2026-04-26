@@ -7,7 +7,7 @@ In deze PoC wordt er getracht om via het mainframe contact te leggen met een API
 \subsection{Python}
 In de code van de Python bestanden \ref{mint:privateAPIPython} en \ref{mint:publiekeAPIPython} is het proces bijna hetzelfde. De \texttt{requests} package van Python wordt geïmporteerd. Deze veelgebruikte package zorgt ervoor dat API requests op een simpele manier kunnen worden uitgevoerd. Voor de private API moet er een gebruikers-ID en een wachtwoord worden meegegeven om juist te kunnen aanmelden op de het mainframe. Hiervoor wordt een extra package van Python gebruikt. Voor de publieke API moeten er bepaalde parameters worden meegegeven om de informatie te verkrijgen over een specifieke locatie (hier Madrid). Bij het gebruik van de requests package wordt automatisch geverifieerd of de server (het systeem dat wordt aangesproken) wel veilig is. Dit wordt gedaan aan de hand van internationale standaarden en certificaten. Bij de private API is dit manueel uitgezet, omdat we het systeem kennen, en de certificaten dit voorbeeld onnodig complex zouden maken. Nadat de request al dan niet succesvol is verstuurd, wordt er een response ontvangen. Als dit antwoord goed is (met de code 200), dan worden de resultaten afgebeeld op het scherm.
 
-\begin{listing} [H]
+
     \begin{minted}[frame=lines, framesep=2mm, linenos]{python}
         # De Python package requests en getpass worden geimporteerd
         import requests
@@ -41,10 +41,10 @@ In de code van de Python bestanden \ref{mint:privateAPIPython} en \ref{mint:publ
         for api in ApiList['API']:
             print(api['APIName'])
     \end{minted}
-  \caption[Private API op hetzelfde mainframe in Python]{\label{mint:privateAPIPython}Contact leggen met een private API op hetzelfde mainframe met Python}
-\end{listing}
+  \captionof{listing}{\label{mint:privateAPIPython}Contact leggen met een private API op hetzelfde mainframe met Python}
 
-\begin{listing} [H]
+
+
     \begin{minted}[frame=lines, framesep=2mm, linenos]{python}
         # De Python package requests wordt geimporteerd
         import requests
@@ -81,8 +81,8 @@ In de code van de Python bestanden \ref{mint:privateAPIPython} en \ref{mint:publ
         print(f"Temperatuur: {temp} graden Celsius")
         print(f"Windsnelheid: {wind} km/h")
     \end{minted}
-  \caption[Publieke API in Python]{\label{mint:publiekeAPIPython}Contact leggen met een publieke API met Python}
-\end{listing}
+  \captionof{listing}{\label{mint:publiekeAPIPython}Contact leggen met een publieke API met Python}
+
 
 \subsection{Rexx}
 In de code van de Rexx bestanden \ref{mint:privateAPIRexx} en \ref{mint:publiekeAPIRexx} wordt gebruik gemaakt van het Unix commando \texttt{cURL} (Client URL). Dit commando wordt veel gebruikt voor het communiceren tussen systemen en is dus niet specifiek voor Rexx. Oorspronkelijk zou er voor Rexx gebruik gemaakt worden van de z/OS Client WET (Web Enablement Toolkit), maar dit bleek te complex voor het relatief kleine voorbeeld. Ervaren systeemprogrammeur Lionel Dyck gaf dit advies:
@@ -91,7 +91,7 @@ In de code van de Rexx bestanden \ref{mint:privateAPIRexx} en \ref{mint:publieke
 
 Het algemene proces in Rexx is hetzelfde als in Python. Er wordt een request gestuurd naar een API via een url, met enkele parameters of credentials. In de Rexx code moeten de parameters en credentials op handmatige manier toegevoegd worden aan de url voordat we deze kunnen versturen met het curl commando. Het curl commando kan op verschillende manieren worden aangepast aan de noden van de use case, gelijkaardig aan de requests package van Python. Er wordt een stem variabele meegegeven, dit werkt op een gelijkaardige manier als een array, waar de response zal in terechtkomen. Nadat we checken op errors (rc = 0), kunnen we in de response met handige string manipulatie de gewenste resultaten afbeelden.
 
-\begin{listing} [H]
+
     \begin{minted}[frame=lines, framesep=2mm, linenos]{rexx}
         /* REXX */
         
@@ -139,10 +139,10 @@ Het algemene proces in Rexx is hetzelfde als in Python. Er wordt een request ges
         exit 0
         
     \end{minted}
-    \caption[Private API op hetzelfde mainframe in Rexx]{\label{mint:privateAPIRexx}Contact leggen met een private API op hetzelfde mainframe met Rexx}
-\end{listing}
+    \captionof{listing}{\label{mint:privateAPIRexx}Contact leggen met een private API op hetzelfde mainframe met Rexx}
 
-\begin{listing} [H]
+
+
     \begin{minted}[frame=lines, framesep=2mm, linenos]{rexx}
         /* REXX */
         
@@ -180,8 +180,8 @@ Het algemene proces in Rexx is hetzelfde als in Python. Er wordt een request ges
         exit 0
         
     \end{minted}
-    \caption[Publieke API in Rexx]{\label{mint:publiekeAPIRexx}Contact leggen met een publieke API met Rexx}
-\end{listing}
+    \captionof{listing}{\label{mint:publiekeAPIRexx}Contact leggen met een publieke API met Rexx}
+
 
 \subsection{Bevindingen}
 Eerst en vooral lijkt er geen verschil te zijn tussen het gebruik van een API op het (eigen) mainframe, of buiten het mainframe. Dit komt omdat de connectie hoe dan ook via http gebeurt, dus elke verbinding wordt als een verbinding van buiten beschouwd. Voor het aanmaken van de bestanden en schrijven en uitvoeren van de code waren er problemen met de tags van de files. Voor het correct interpreteren en uitvoeren van de Python en Rexx bestanden is een verschillende filetag nodig. Zo'n filetag kan worden veranderd met behulp van het \texttt{chtag} commando. Voor Python werd \texttt{chtag -tc 819} gebruikt, en voor Rexx \texttt{chtag -tc 1047}. Om bestaande inhoud van een bestand om te zetten naar een nieuw bestand met de juiste tag kan gebruik worden gemaakt van het \texttt{iconv} commando. 
@@ -219,9 +219,10 @@ Voor het schrijven van de Python code is weinig werk nodig. Het meest ingewikkel
 In deze PoC wordt er met behulp van skeletons een JCL job gegenereerd. Deze JCL heeft als doel het kopiëren van de members van een PDS(Partitioned DataSet, het equivalent van een folder) naar een andere PDS. Er wordt dus een backup gemaakt. Daarvoor wordt gebruik gemaakt van de IEBCOPY utility van JCL.
 
 \subsection{Python}
-In de Python code van \ref{mint:JCLPython} wordt gebruik gemaakt van het jinja2 template in \ref{mint:JCLJinjaTemplate}.
+In de Python code van \ref{mint:JCLPython} wordt gebruik gemaakt van het jinja2 template in \ref{mint:JCLJinjaTemplate}. Er worden vooraf enkele variabelen gedefinieerd. Deze variabelen worden gebruikt om de placeholders(variabelen tussen dubbele accolades \texttt{\{\{ variabele \}\}}) in het jinja2 template te vervangen. De omgeving wordt ingesteld en het jinja2 template wordt gedefinieerd. Nadien kunnen we met behulp van de \texttt{render} methode uit het jinja2 package de variabelen die we willen gebruiken meegeven.
+Tenslotte wordt het ingevulde template weggeschreven naar een ander bestand \texttt{backupp.jcl} in dezelfde folder als het script, klaar om uitgevoerd te worden.
 
-\begin{listing} [H]
+
     \begin{minted}[frame=lines, framesep=2mm, linenos]{python}
         # De Python package os en jinja2 worden geimporteerd
         import os
@@ -242,24 +243,22 @@ In de Python code van \ref{mint:JCLPython} wordt gebruik gemaakt van het jinja2 
         # Het skeleton verwerken en de variabelen substitueren
         jcl = template.render(userid=userid, srcqual=srcqual, tgtqual=tgtqual, tgtdisp=tgtdisp)
         
-        # Elke regel afkappen tot maximaal 80 tekens, zoals vereist door JCL
-        jcl = '\n'.join(line.rstrip()[:80] for line in jcl.splitlines())
-        
         # De gegenereerde JCL wegschrijven naar een USS-bestand in dezelfde map
         output_file = os.path.join(file_dir, 'backupp.jcl')
         with open(output_file, 'w') as f:
         f.write(jcl)
     \end{minted}
-    \caption[Python voor JCL genereren]{\label{mint:JCLPython}Python code voor het gebruiken van Jinja2 templates voor het genereren van JCL}
-\end{listing}
+    \captionof{listing}{\label{mint:JCLPython}Python code voor het gebruiken van Jinja2 templates voor het genereren van JCL}
 
-\begin{listing} [H]
+
+
     \begin{minted}[frame=lines, framesep=2mm, linenos]{JCL}
         //{{ userid }} JOB 'TEST JOB',CLASS=A,MSGCLASS=N
         //S010    EXEC PGM=IEBCOPY
         //SYSPRINT DD SYSOUT=*
         //INDD     DD DISP=SHR,DSN={{ userid }}.{{ srcqual }}
-        //OUTDD    DD DISP=({{ tgtdisp }}),DSN={{ userid }}.{{ tgtqual }},
+        //OUTDD    DD DISP=({{ tgtdisp }}),
+        //            DSN={{ userid }}.{{ tgtqual }},
         //            UNIT=SYSALLDA,SPACE=(TRK,(1,1)),
         //            DCB=(RECFM=FB,DSORG=PO,LRECL=80),DSNTYPE=LIBRARY
         //SYSIN    DD *
@@ -267,11 +266,11 @@ In de Python code van \ref{mint:JCLPython} wordt gebruik gemaakt van het jinja2 
         /*
         
     \end{minted}
-    \caption[Jinja2 template voor Python]{\label{mint:JCLJinjaTemplate}Het jinja2 template gebruikt door Python}
-\end{listing}
+    \captionof{listing}{\label{mint:JCLJinjaTemplate}Het jinja2 template gebruikt door Python}
+
 
 \subsection{Rexx}
-In de Rexx code van \ref{mint:JCLRexx} wordt via ISPF File Tailoring Services gebruik gemaakt van het skeleton \ref{mint:JCLSkeleton}. Er worden vooraf enkele variabelen gedefinieerd. Deze variabelen worden gebruikt om de placeholders(variabelen die beginnen met een '\&') in het skeleton te vervangen. Op die manier moeten voor het opnieuw genereren van de JCL code enkel de variabelen in de Rexx code worden aangepast. Na het definiëren van de variabelen, worden via een ISPF omgeving commando's uitgevoerd om de JCL te genereren. De placeholders worden vervangen, en het resultaat wordt eerst in een tijdelijke dataset gestoken, vooraleer het wordt verplaatst als member \texttt{BACKUPR}naar een PDS genaamd \texttt{GENJCL.JCL}, en die vervangt als die al bestaat. Als laatste worden referenties vrijgegeven om terug naar het startpunt te gaan. Naast de variabelen is het grootste deel van de Rexx code eigenlijk ISPF code, die wordt uitgevoerd in een ISPF omgeving, maar wordt verstuurd vanuit Rexx.
+In de Rexx code van \ref{mint:JCLRexx} wordt via ISPF File Tailoring Services gebruik gemaakt van het skeleton \ref{mint:JCLSkeleton}. Opnieuw worden er enkele variabelen gedefinieerd. In het geval van Rexx en ISPF zijn de placeholders de variabelen die beginnen met een \texttt{'\&'} in het skeleton. De enige variatie op de JCL van Python, is dat hier aan de jobnaam een 'X' wordt toegevoegd. Dit komt omdat als de jobnaam van de JCL een lengte heeft die kleiner is dan 8, ISPF daar zelf een letter (meestal X) zal aan toevoegen, vooraleer ISPF de job kan submitten. Aangezien wij hier de JCL niet onmiddelijk submitten, maar eerst opslaan, moeten we die 'X' er zelf manueel aan toevoegen. Na het definiëren van de variabelen, worden via een ISPF omgeving commando's uitgevoerd om de JCL te genereren. De placeholders worden vervangen, en het resultaat wordt eerst in een tijdelijke dataset gestoken, vooraleer het wordt verplaatst als member \texttt{BACKUPR} naar een PDS genaamd \texttt{GENJCL.JCL}, die wordt vervangen als die al bestaat. Als laatste worden de referenties naar datasets vrijgegeven om terug naar het startpunt te gaan. Naast de variabelen is het grootste deel van de Rexx code eigenlijk ISPF code, die wordt uitgevoerd in een ISPF omgeving, maar wordt verstuurd vanuit Rexx.
 
 
     \begin{minted}[frame=lines, framesep=2mm, linenos]{rexx}
@@ -282,7 +281,7 @@ In de Rexx code van \ref{mint:JCLRexx} wordt via ISPF File Tailoring Services ge
         USERID  = USERID()
         USERIDJ = USERID
         if LENGTH(USERIDJ) < 8 then do
-        USERIDJ = USERIDJ || 'A'
+        USERIDJ = USERIDJ || 'X'
         end
         SRCQUAL = 'MYLIB.SOURCE'
         TGTQUAL = 'MYLIB.BACKUPR'
@@ -330,30 +329,14 @@ In de Rexx code van \ref{mint:JCLRexx} wordt via ISPF File Tailoring Services ge
     \end{minted}
     \captionof{listing}{\label{mint:JCLRexx}Rexx code voor het gebruiken van ISPF File Tailoring van JCL skeletons}
 
-\begin{listing} [H]
+
     \begin{minted}[frame=lines, framesep=2mm, linenos]{JCL}
         //&USERIDJ JOB 'TEST JOB',CLASS=A,MSGCLASS=N
         //S010    EXEC PGM=IEBCOPY
         //SYSPRINT DD SYSOUT=*
         //INDD     DD DISP=SHR,DSN=&USERID..&SRCQUAL
-        //OUTDD    DD DISP=(&TGTDISP),DSN=&USERID..&TGTQUAL,
-        //            UNIT=SYSALLDA,SPACE=(TRK,(1,1)),
-        //            DCB=(RECFM=FB,DSORG=PO,LRECL=80),DSNTYPE=LIBRARY
-        //SYSIN    DD *
-        COPY INDD=INDD,OUTDD=OUTDD
-        /*
-    \end{minted}
-    \caption[JCL skeleton voor Rexx]{\label{mint:JCLSkeleton}Het JCL skeleton gebruikt door ISPF File Tailoring met Rexx}
-\end{listing}
-
-\subsubsection{Gegenereerde JCL}
-\begin{listing} [H]
-    \begin{minted}[frame=lines, framesep=2mm, linenos]{JCL}
-        //YVG1A JOB 'TEST JOB',CLASS=A,MSGCLASS=N
-        //S010    EXEC PGM=IEBCOPY
-        //SYSPRINT DD SYSOUT=*
-        //INDD     DD DISP=SHR,DSN=YVG1.MYLIB.SOURCE
-        //OUTDD    DD DISP=(MOD,CATLG,CATLG),DSN=YVG1.MYLIB.BACKUPR,
+        //OUTDD    DD DISP=(&TGTDISP),
+        //            DSN=&USERID..&TGTQUAL,
         //            UNIT=SYSALLDA,SPACE=(TRK,(1,1)),
         //            DCB=(RECFM=FB,DSORG=PO,LRECL=80),DSNTYPE=LIBRARY
         //SYSIN    DD *
@@ -361,12 +344,29 @@ In de Rexx code van \ref{mint:JCLRexx} wordt via ISPF File Tailoring Services ge
         /*
         
     \end{minted}
-    \caption[Gegenereerde JCL]{\label{mint:GegenereerdeJCL}Het gegenereerde JCL bestand van zowel de Rexx als Python code}
-\end{listing}
+    \captionof{listing}{\label{mint:JCLSkeleton}Het JCL skeleton gebruikt door ISPF File Tailoring met Rexx}
+
+
+\subsubsection{Gegenereerde JCL}
+
+    \begin{minted}[frame=lines, framesep=2mm, linenos]{JCL}
+        //YVG1 JOB 'TEST JOB',CLASS=A,MSGCLASS=N
+        //S010    EXEC PGM=IEBCOPY
+        //SYSPRINT DD SYSOUT=*
+        //INDD     DD DISP=SHR,DSN=YVG1.MYLIB.SOURCE
+        //OUTDD    DD DISP=(MOD,CATLG,CATLG),DSN=YVG1.MYLIB.BACKUPP,
+        //            UNIT=SYSALLDA,SPACE=(TRK,(1,1)),
+        //            DCB=(RECFM=FB,DSORG=PO,LRECL=80),DSNTYPE=LIBRARY
+        //SYSIN    DD *
+        COPY INDD=INDD,OUTDD=OUTDD
+        /*
+    \end{minted}
+    \captionof{listing}{\label{mint:GegenereerdeJCL}Het gegenereerde JCL bestand van zowel de Rexx als Python code}
+
 
 \subsection{Bevindingen}
 Extra bevindingen:
-we slaan de jcl op in een PDS omdat we de code willen analyseren en bekijken. De jcl code zou op zich ook direct kunnen worden uitgevoerd vanuit de code. We moeten een 'A' toevoegen aan de jobnaam omdat ISPF anders klaagt. Daarom doen we dat in de code als de jobnaam kleiner is dan 8. Deze PoC doen we Rexx vanuit ISPF. Het manueel aanpassen van de rexx code is niet gebruiksvriendelijk. Dit zou op zijn beurt ook kunnen worden geautomatiseerd, zodat dat proces gebruiksvriendelijk gebeurt. Kan met ISPF screens? Voor Python is zoau nodig om de jcl aan een dataset toe te voegen, maar de jcl kan worden gesubmit via USS door het submit commando \texttt{submit backupp.jcl}. Het neige verschil in JCL uitkomst is dat Rexx die A nodig heeft, maar Python niet. De python code om de regels voorbij 80 af te kappen is nog onduidelijk -> vragen aan bobby
+we slaan de jcl op in een PDS omdat we de code willen analyseren en bekijken. De jcl code zou op zich ook direct kunnen worden uitgevoerd vanuit de code. We moeten een 'X' toevoegen aan de jobnaam in Rexx omdat ISPF anders klaagt. Daarom doen we dat in de code als de jobnaam kleiner is dan 8. Als de JCL rechtsreeks wordt gesubmit is dat niet nodig. Deze PoC doen we Rexx vanuit ISPF en Python vanuit USS. Het manueel aanpassen van de rexx code is niet gebruiksvriendelijk. Dit zou op zijn beurt ook kunnen worden geautomatiseerd, zodat dat proces gebruiksvriendelijk gebeurt. Kan met ISPF screens? Voor Python is zoau nodig om de jcl aan een dataset toe te voegen, maar de jcl kan worden gesubmit via USS door het submit commando \texttt{submit backupp.jcl}. Het neige verschil in JCL uitkomst is dat Rexx die X nodig heeft, maar Python niet. In de skeleton/template worden komma's gezet na bepaalde lijnen, omdat dat commando op de volgende lijn doorgaat. Dat is omdat een lijn maar 80 karakters mag hebben. Een dataset naam is max 44 karakters, dus is het best om die op een aparte lijn te zetten, zodat die niet voorbij de 80 gaat.
 
 \begin{itemize}
     \item \textbf{Integratie met tools op het mainframe:}
