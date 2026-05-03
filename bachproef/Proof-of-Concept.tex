@@ -8,80 +8,80 @@ In deze PoC wordt er getracht om via het mainframe contact te leggen met een API
 In de code van de Python bestanden \ref{mint:privateAPIPython} en \ref{mint:publiekeAPIPython} is het proces bijna hetzelfde. De \texttt{requests} package van Python wordt geïmporteerd. Deze veelgebruikte package zorgt ervoor dat API requests op een simpele manier kunnen worden uitgevoerd. Voor de private API moet er een gebruikers-ID en een wachtwoord worden meegegeven om juist te kunnen aanmelden op de het mainframe. Hiervoor wordt een extra package van Python gebruikt. Voor de publieke API moeten er bepaalde parameters worden meegegeven om de informatie te verkrijgen over een specifieke locatie (hier Madrid). Bij het gebruik van de requests package wordt automatisch geverifieerd of de server (het systeem dat wordt aangesproken) wel veilig is. Dit wordt gedaan aan de hand van internationale standaarden en certificaten. Bij de private API is dit manueel uitgezet, omdat we het systeem kennen, en de certificaten dit voorbeeld onnodig complex zouden maken. Nadat de request al dan niet succesvol is verstuurd, wordt er een response ontvangen. Als dit antwoord goed is (met de code 200), dan worden de resultaten afgebeeld op het scherm.
 
 
-    \begin{minted}[frame=lines, framesep=2mm, linenos]{python}
-        # De Python package requests en getpass worden geimporteerd
-        import requests
-        from getpass import getpass
-        
-        # De credentials om in te loggen worden aan de gebruiker gevraagd en opgeslaan
-        myCreds = ('','')
-        
-        if myCreds[0] == '':
-            userid = input("Give your userid: ")
-            myCreds = (userid,'')
-        
-        if myCreds[1] == '':
-            passwd = getpass("Give your password: ")
-            myCreds = (myCreds[0], passwd)
-        
-        # De URL naar de private API van mainframeyin
-        url = "https://mainframeyin:8092/LWWAPI/API/API"
-        
-        # De credentials worden meegegeven zodat correct kan worden aangemeld
-        # Er wordt niet geverifieerd of deze API veilig is, omdat we deze zelf beheren
-        response = requests.get(url, auth=myCreds, verify=False)
-        
-        if (response.status_code != 200):
-            raise Exception(f"{response.status_code} - {response.text}")
-        else:
-            # We verkrijgen de gegevens in JSON formaat
-            ApiList = response.json()
-        
-        # De verschillende API namen worden afgebeeld
-        for api in ApiList['API']:
-            print(api['APIName'])
-    \end{minted}
-  \captionof{listing}{\label{mint:privateAPIPython}Contact leggen met een private API op hetzelfde mainframe met Python}
+\begin{minted}[frame=lines, framesep=2mm, linenos]{python}
+# De Python package requests en getpass worden geimporteerd
+import requests
+from getpass import getpass
+
+# De credentials om in te loggen worden aan de gebruiker gevraagd en opgeslaan
+myCreds = ('','')
+
+if myCreds[0] == '':
+    userid = input("Give your userid: ")
+    myCreds = (userid,'')
+
+if myCreds[1] == '':
+    passwd = getpass("Give your password: ")
+    myCreds = (myCreds[0], passwd)
+
+# De URL naar de private API van mainframeyin
+url = "https://mainframeyin:8092/LWWAPI/API/API"
+
+# De credentials worden meegegeven zodat correct kan worden aangemeld
+# Er wordt niet geverifieerd of deze API veilig is, omdat we deze zelf beheren
+response = requests.get(url, auth=myCreds, verify=False)
+
+if (response.status_code != 200):
+    raise Exception(f"{response.status_code} - {response.text}")
+else:
+    # We verkrijgen de gegevens in JSON formaat
+    ApiList = response.json()
+
+# De verschillende API namen worden afgebeeld
+for api in ApiList['API']:
+    print(api['APIName'])
+\end{minted}
+\captionof{listing}{\label{mint:privateAPIPython}Contact leggen met een private API op hetzelfde mainframe met Python}
 
 
 
-    \begin{minted}[frame=lines, framesep=2mm, linenos]{python}
-        # De Python package requests wordt geimporteerd
-        import requests
-        
-        # De coördinaten voor Madrid
-        params = {
-            "latitude": 40.4168,
-            "longitude": -3.7038,
-            "current_weather": "true",
-            "temperature_unit": "celsius"
-        }
-        
-        # De URL naar de publieke API van open-meteo
-        url = "https://api.open-meteo.com/v1/forecast"
-        
-        # Er zijn hier geen credentials nodig, aangezien de API public beschikbaar is
-        # We geven de parameters mee, zodat we het weer van Madrid krijgen
-        response = requests.get(url, params=params)
-        
-        # Als er een error is, wordt die hier getoond
-        if response.status_code != 200:
-            raise Exception(f"{response.status_code} - {response.text}")
-        else:
-            # We verkrijgen de gegevens in JSON formaat
-            weather_data = response.json()
-        
-        # We halen enkele gegevens uit de JSON
-        current = weather_data['current_weather']
-        temp = current['temperature']
-        wind = current['windspeed']
-        
-        # Het resultaat wordt afgebeeld
-        print(f"Het weer in Madrid:")
-        print(f"Temperatuur: {temp} graden Celsius")
-        print(f"Windsnelheid: {wind} km/h")
-    \end{minted}
-  \captionof{listing}{\label{mint:publiekeAPIPython}Contact leggen met een publieke API met Python}
+\begin{minted}[frame=lines, framesep=2mm, linenos]{python}
+# De Python package requests wordt geimporteerd
+import requests
+
+# De coördinaten voor Madrid
+params = {
+    "latitude": 40.4168,
+    "longitude": -3.7038,
+    "current_weather": "true",
+    "temperature_unit": "celsius"
+}
+
+# De URL naar de publieke API van open-meteo
+url = "https://api.open-meteo.com/v1/forecast"
+
+# Er zijn hier geen credentials nodig, aangezien de API public beschikbaar is
+# We geven de parameters mee, zodat we het weer van Madrid krijgen
+response = requests.get(url, params=params)
+
+# Als er een error is, wordt die hier getoond
+if response.status_code != 200:
+    raise Exception(f"{response.status_code} - {response.text}")
+else:
+    # We verkrijgen de gegevens in JSON formaat
+    weather_data = response.json()
+
+# We halen enkele gegevens uit de JSON
+current = weather_data['current_weather']
+temp = current['temperature']
+wind = current['windspeed']
+
+# Het resultaat wordt afgebeeld
+print(f"Het weer in Madrid:")
+print(f"Temperatuur: {temp} graden Celsius")
+print(f"Windsnelheid: {wind} km/h")
+\end{minted}
+\captionof{listing}{\label{mint:publiekeAPIPython}Contact leggen met een publieke API met Python}
 
 
 \subsection{Rexx}
@@ -91,96 +91,91 @@ In de code van de Rexx bestanden \ref{mint:privateAPIRexx} en \ref{mint:publieke
 
 Het algemene proces in Rexx is hetzelfde als in Python. Er wordt een request gestuurd naar een API via een url, met enkele parameters of credentials. In de Rexx code moeten de parameters en credentials op handmatige manier toegevoegd worden aan de url voordat we deze kunnen versturen met het curl commando. Het curl commando kan op verschillende manieren worden aangepast aan de noden van de use case, gelijkaardig aan de requests package van Python. Er wordt een stem variabele meegegeven, dit werkt op een gelijkaardige manier als een array, waar de response zal in terechtkomen. Nadat we checken op errors (rc = 0), kunnen we in de response met handige string manipulatie de gewenste resultaten afbeelden.
 
+\begin{minted}[frame=lines, framesep=2mm, linenos]{rexx}
+/* REXX */
 
-    \begin{minted}[frame=lines, framesep=2mm, linenos]{rexx}
-        /* REXX */
-        
-        /* De URL naar de private API */
-        url = 'https://mainframeyin:8092/LWWAPI/API/API'
-        
-        /* De credentials om in te loggen aan de gebruiker vragen */
-        say "Give your userid: "
-        parse pull userid
-        myCreds.1 = userid
-        
-        say "Give your password: "
-        parse pull passwd
-        myCreds.2 = passwd
-        
-        /* We bouwen het curl commando op:
-        -k : --insecure (vergelijkbaar met verify=False in Python)
-        -u : --user (voor Basic Authentication)
-        */
-        commando = "curl -k -u "myCreds.1":"myCreds.2" '"url"'"
-        
-        /* Voer het Unix commando uit */
-        rc = bpxwunix(commando,,response.,error.)
-        
-        /* Als er een error is, wordt die hier getoond */
-        if rc <> 0 then do
-            say "Error executing curl. Return code:" rc
-            do i = 1 to error.0
-                say error.i
-            end
-            exit 8
-        end
-        
-        /* Verwerking van de JSON response */
-        /* We zoeken naar de APINames in de JSON */
-        ApiList = response.1
-        
-        say "Lijst met API's:"
-        do while pos('"APIName":"', ApiList) > 0
-            /* De verschillende API namen worden afgebeeld */
-            parse var ApiList '"APIName":"' name '"' ApiList
-            say name
-        end
-        
-        exit 0
-        
-    \end{minted}
-    \captionof{listing}{\label{mint:privateAPIRexx}Contact leggen met een private API op hetzelfde mainframe met Rexx}
+/* De URL naar de private API */
+url = 'https://mainframeyin:8092/LWWAPI/API/API'
 
+/* De credentials om in te loggen aan de gebruiker vragen */
+say "Give your userid: "
+parse pull userid
+myCreds.1 = userid
 
+say "Give your password: "
+parse pull passwd
+myCreds.2 = passwd
 
-    \begin{minted}[frame=lines, framesep=2mm, linenos]{rexx}
-        /* REXX */
-        
-        /* We moeten de parameters in de url steken van de publieke API */
-        url = 'https://api.open-meteo.com/v1/forecast?latitude=40.4168' || ,
-        '&longitude=-3.7038&current_weather=true&temperature_unit=celsius'
-        
-        /* We maken het Unix commando met de publieke API van open-meteo*/
-        commando = "curl '"url"'"
-        
-        /* Dit is een Rexx commando (bpxwunix) om een Unix commando (curl)
-        uit te voeren. Het antwoord komt in response. terecht, enige errors in error.*/
-        rc = bpxwunix(commando,,response.,error.)
-        
-        /* Als er een error is, wordt die hier getoond */
-        if rc <> 0 then do
-            say "Error executing curl. Return code:" rc
-            do i = 1 to error.0
-                say error.i
-            end
-            exit 8
-        end
-        
-        /* We zoeken specifiek binnen de 'current_weather' sectie
-        We snijden de tekst van links naar rechts
-        op zoek naar temperature en windspeed */
-        parse var response.1 'current_weather":{' data '}' .
-        parse var data 'temperature":' temp ','
-        parse var data 'windspeed":' wind ','
-        
-        say "Het weer in Madrid:"
-        say "Temperatuur: " temp "graden Celsius"
-        say "Windsnelheid:" wind "km/h"
-        
-        exit 0
-        
-    \end{minted}
-    \captionof{listing}{\label{mint:publiekeAPIRexx}Contact leggen met een publieke API met Rexx}
+/* We bouwen het curl commando op:
+-k : --insecure (vergelijkbaar met verify=False in Python)
+-u : --user (voor Basic Authentication)
+*/
+commando = "curl -k -u "myCreds.1":"myCreds.2" '"url"'"
+
+/* Voer het Unix commando uit */
+rc = bpxwunix(commando,,response.,error.)
+
+/* Als er een error is, wordt die hier getoond */
+if rc <> 0 then do
+    say "Error executing curl. Return code:" rc
+    do i = 1 to error.0
+        say error.i
+    end
+    exit 8
+end
+
+/* Verwerking van de JSON response */
+/* We zoeken naar de APINames in de JSON */
+ApiList = response.1
+
+say "Lijst met API's:"
+do while pos('"APIName":"', ApiList) > 0
+    /* De verschillende API namen worden afgebeeld */
+    parse var ApiList '"APIName":"' name '"' ApiList
+    say name
+end
+
+exit 0
+\end{minted}
+\captionof{listing}{\label{mint:privateAPIRexx}Contact leggen met een private API op hetzelfde mainframe met Rexx}
+
+\begin{minted}[frame=lines, framesep=2mm, linenos]{rexx}
+/* REXX */
+
+/* We moeten de parameters in de url steken van de publieke API */
+url = 'https://api.open-meteo.com/v1/forecast?latitude=40.4168' || ,
+'&longitude=-3.7038&current_weather=true&temperature_unit=celsius'
+
+/* We maken het Unix commando met de publieke API van open-meteo*/
+commando = "curl '"url"'"
+
+/* Dit is een Rexx commando (bpxwunix) om een Unix commando (curl)
+uit te voeren. Het antwoord komt in response. terecht, enige errors in error.*/
+rc = bpxwunix(commando,,response.,error.)
+
+/* Als er een error is, wordt die hier getoond */
+if rc <> 0 then do
+say "Error executing curl. Return code:" rc
+do i = 1 to error.0
+say error.i
+end
+exit 8
+end
+
+/* We zoeken specifiek binnen de 'current_weather' sectie
+We snijden de tekst van links naar rechts
+op zoek naar temperature en windspeed */
+parse var response.1 'current_weather":{' data '}' .
+parse var data 'temperature":' temp ','
+parse var data 'windspeed":' wind ','
+
+say "Het weer in Madrid:"
+say "Temperatuur: " temp "graden Celsius"
+say "Windsnelheid:" wind "km/h"
+
+exit 0
+\end{minted}
+\captionof{listing}{\label{mint:publiekeAPIRexx}Contact leggen met een publieke API met Rexx}
 
 
 \subsection{Bevindingen}
@@ -219,154 +214,183 @@ Voor het schrijven van de Python code is weinig werk nodig. Het meest ingewikkel
 In deze PoC wordt er met behulp van skeletons een JCL job gegenereerd. Deze JCL heeft als doel het kopiëren van de members van een PDS(Partitioned DataSet, het equivalent van een folder) naar een andere PDS. Er wordt dus een backup gemaakt. Daarvoor wordt gebruik gemaakt van de IEBCOPY utility van JCL.
 
 \subsection{Python}
-In de Python code van \ref{mint:JCLPython} wordt gebruik gemaakt van het jinja2 template in \ref{mint:JCLJinjaTemplate}. Er worden vooraf enkele variabelen gedefinieerd. Deze variabelen worden gebruikt om de placeholders(variabelen tussen dubbele accolades \texttt{\{\{ variabele \}\}}) in het jinja2 template te vervangen. De omgeving wordt ingesteld en het jinja2 template wordt gedefinieerd. Nadien kunnen we met behulp van de \texttt{render} methode uit het jinja2 package de variabelen die we willen gebruiken meegeven.
+In de Python code van \ref{mint:JCLPython} wordt gebruik gemaakt van het jinja2 template in \ref{mint:JCLJinjaTemplate}. Er worden vooraf enkele variabelen gedefinieerd. Deze variabelen worden gebruikt om de placeholders(variabelen tussen dubbele accolades \texttt{\{\{ variabele \}\}}) in het jinja2 template te vervangen. De omgeving wordt ingesteld en het jinja2 template wordt gedefinieerd. Nadien kunnen we met behulp van de \texttt{render} methode uit het jinja2 package de variabelen die we willen gebruiken meegeven om de placeholders te vervangen.
 Tenslotte wordt het ingevulde template weggeschreven naar een ander bestand \texttt{backupp.jcl} in dezelfde folder als het script, klaar om uitgevoerd te worden.
 
+\begin{minted}[frame=lines, framesep=2mm, linenos]{python}
+# De Python package os en jinja2 worden geimporteerd
+import os
+from jinja2 import Environment, FileSystemLoader
 
-    \begin{minted}[frame=lines, framesep=2mm, linenos]{python}
-        # De Python package os en jinja2 worden geimporteerd
-        import os
-        from jinja2 import Environment, FileSystemLoader
-        
-        # Definieren van de variabelen voor de jinja-substitutie
-        userid  = os.environ.get('USER')
-        srcqual = 'MYLIB.SOURCE'
-        tgtqual = 'MYLIB.BACKUPP'
-        tgtdisp = 'MOD,CATLG,CATLG'
-        
-        # De Jinja2-omgeving instellen en het skeletonbestand
-        # inladen vanuit dezelfde map als het script
-        file_dir = os.path.dirname(os.path.abspath(__file__))
-        env      = Environment(loader=FileSystemLoader(file_dir))
-        template = env.get_template('skeleton.j2')
-        
-        # Het skeleton verwerken en de variabelen substitueren
-        jcl = template.render(userid=userid, srcqual=srcqual, tgtqual=tgtqual, tgtdisp=tgtdisp)
-        
-        # De gegenereerde JCL wegschrijven naar een USS-bestand in dezelfde map
-        output_file = os.path.join(file_dir, 'backupp.jcl')
-        with open(output_file, 'w') as f:
-        f.write(jcl)
-    \end{minted}
-    \captionof{listing}{\label{mint:JCLPython}Python code voor het gebruiken van Jinja2 templates voor het genereren van JCL}
+# Definieren van de variabelen voor de jinja-substitutie
+userid  = os.environ.get('USER')
+srcqual = 'MYLIB.SOURCE'
+tgtqual = 'MYLIB.BACKUPP'
+tgtdisp = 'MOD,CATLG,CATLG'
 
+# De Jinja2-omgeving instellen en het skeletonbestand
+# inladen vanuit dezelfde map als het script
+file_dir = os.path.dirname(os.path.abspath(__file__))
+env      = Environment(loader=FileSystemLoader(file_dir))
+template = env.get_template('skeleton.j2')
+
+# Het skeleton verwerken en de variabelen substitueren
+jcl = template.render(userid=userid, srcqual=srcqual, tgtqual=tgtqual, tgtdisp=tgtdisp)
+
+# De gegenereerde JCL wegschrijven naar een USS-bestand in dezelfde map
+output_file = os.path.join(file_dir, 'backupp.jcl')
+with open(output_file, 'w') as f:
+    f.write(jcl)
+\end{minted}
+\captionof{listing}{\label{mint:JCLPython}Python code voor het gebruiken van Jinja2 templates voor het genereren van JCL}
 
 
-    \begin{minted}[frame=lines, framesep=2mm, linenos]{JCL}
-        //{{ userid }} JOB 'TEST JOB',CLASS=A,MSGCLASS=N
-        //S010    EXEC PGM=IEBCOPY
-        //SYSPRINT DD SYSOUT=*
-        //INDD     DD DISP=SHR,DSN={{ userid }}.{{ srcqual }}
-        //OUTDD    DD DISP=({{ tgtdisp }}),
-        //            DSN={{ userid }}.{{ tgtqual }},
-        //            UNIT=SYSALLDA,SPACE=(TRK,(1,1)),
-        //            DCB=(RECFM=FB,DSORG=PO,LRECL=80),DSNTYPE=LIBRARY
-        //SYSIN    DD *
-        COPY INDD=INDD,OUTDD=OUTDD
-        /*
-        
-    \end{minted}
-    \captionof{listing}{\label{mint:JCLJinjaTemplate}Het jinja2 template gebruikt door Python}
+
+\begin{minted}[frame=lines, framesep=2mm, linenos]{JCL}
+//{{ userid }} JOB 'TEST JOB',CLASS=A,MSGCLASS=N
+//S010    EXEC PGM=IEBCOPY
+//SYSPRINT DD SYSOUT=*
+//INDD     DD DISP=SHR,DSN={{ userid }}.{{ srcqual }}
+//OUTDD    DD DISP=({{ tgtdisp }}),
+//            DSN={{ userid }}.{{ tgtqual }},
+//            UNIT=SYSALLDA,SPACE=(TRK,(1,1)),
+//            DCB=(RECFM=FB,DSORG=PO,LRECL=80),DSNTYPE=LIBRARY
+//SYSIN    DD *
+COPY INDD=INDD,OUTDD=OUTDD
+/*
+\end{minted}
+\captionof{listing}{\label{mint:JCLJinjaTemplate}Het jinja2 template gebruikt door Python}
 
 
 \subsection{Rexx}
-In de Rexx code van \ref{mint:JCLRexx} wordt via ISPF File Tailoring Services gebruik gemaakt van het skeleton \ref{mint:JCLSkeleton}. Opnieuw worden er enkele variabelen gedefinieerd. In het geval van Rexx en ISPF zijn de placeholders de variabelen die beginnen met een \texttt{'\&'} in het skeleton. De enige variatie op de JCL van Python, is dat hier aan de jobnaam een 'X' wordt toegevoegd. Dit komt omdat als de jobnaam van de JCL een lengte heeft die kleiner is dan 8, ISPF daar zelf een letter (meestal X) zal aan toevoegen, vooraleer ISPF de job kan submitten. Aangezien wij hier de JCL niet onmiddelijk submitten, maar eerst opslaan, moeten we die 'X' er zelf manueel aan toevoegen. Na het definiëren van de variabelen, worden via een ISPF omgeving commando's uitgevoerd om de JCL te genereren. De placeholders worden vervangen, en het resultaat wordt eerst in een tijdelijke dataset gestoken, vooraleer het wordt verplaatst als member \texttt{BACKUPR} naar een PDS genaamd \texttt{GENJCL.JCL}, die wordt vervangen als die al bestaat. Als laatste worden de referenties naar datasets vrijgegeven om terug naar het startpunt te gaan. Naast de variabelen is het grootste deel van de Rexx code eigenlijk ISPF code, die wordt uitgevoerd in een ISPF omgeving, maar wordt verstuurd vanuit Rexx.
+In de Rexx code van \ref{mint:JCLRexx} wordt via ISPF File Tailoring Services gebruik gemaakt van het skeleton in \ref{mint:JCLSkeleton}. Opnieuw worden er enkele variabelen gedefinieerd. In het geval van Rexx en ISPF zijn de placeholders de variabelen die beginnen met een \texttt{'\&'} in het skeleton. Het enige verschil in de resulterende JCL van Rexx met de JCL van Python, is dat hier aan de jobnaam een 'X' wordt toegevoegd. Dit komt door de \texttt{USERID} die wordt gebruikt als jobnaam in de JCL. Als de jobnaam van een JCL hetzelfde is als de user-id van de gebruiker, dan vraagt ISPF om daar een karakter aan toe te voegen. Dit heeft verder geen invloed op de werking van de JCL. Na het definiëren van de variabelen, worden via een ISPF omgeving commando's uitgevoerd om de JCL te genereren. De placeholders worden vervangen, en het resultaat wordt eerst in een tijdelijke dataset gestoken, vooraleer het wordt verplaatst als member \texttt{BACKUPR} naar een PDS genaamd \texttt{GENJCL.JCL}, die wordt vervangen als die al bestaat. Als laatste worden de referenties naar datasets vrijgegeven om terug naar het startpunt te gaan. Naast de variabelen is het grootste deel van de Rexx code eigenlijk ISPF code, die wordt uitgevoerd in een ISPF omgeving, maar wordt verstuurd vanuit Rexx.
+
+\begin{minted}[frame=lines, framesep=2mm, linenos]{rexx}
+/* REXX */
+
+/* Definiëren van de variabelen die zullen worden gebruikt in het skeleton */
+SLIBDS  = 'GENJCL.ISPSLIB'
+USERID  = USERID()
+USERIDJ = USERID
+if LENGTH(USERIDJ) < 8 then do
+    USERIDJ = USERIDJ || 'X'
+end
+SRCQUAL = 'MYLIB.SOURCE'
+TGTQUAL = 'MYLIB.BACKUPR'
+TGTDISP = 'MOD,CATLG,CATLG'
+
+/* Dit geeft aan naar welke omgeving de volgende commando's 
+gestuurd moeten worden. In dit geval is dat ISPF*/
+ADDRESS ISPEXEC
+
+/* De bibliotheek waar onze skeleton inzit wordt toegevoegd aan een eventueel
+reeds bestaande ISPSLIB-definitie van ISPF */
+"LIBDEF ISPSLIB DATASET ID("SLIBDS") STACK"
+
+/* Een tijdelijke sequentiële dataset openen om de JCL in op te slaan. */
+"FTOPEN TEMP"
+
+/* Het SKELETON verwerken en alle variabelen substitueren.
+De gegenereerde uitvoer wordt weggeschreven naar de tijdelijke dataset */
+"FTINCL SKELETON"
+
+/* De naam van de door ISPF aangemaakte tijdelijke dataset ophalen */
+"VGET ZTEMPN SHARED"
+
+/* De tijdelijke dataset sluiten en de gegenereerde JCL afronden */
+"FTCLOSE"
+
+/* De tijdelijke dataset initialiseren voor gebruik door ISPF.
+DATAID geeft een referentie (SRCDD) terug voor gebruik in latere commando's */
+"LMINIT DATAID(SRCDD) DDNAME("ZTEMPN")"
+
+/* De doeldataset initialiseren voor gebruik door ISPF.
+DATAID geeft een referentie (TGTDD) terug voor gebruik in latere commando's */
+"LMINIT DATAID(TGTDD) DATASET('"USERID".GENJCL.JCL')"
+
+/* De gegenereerde JCL kopiëren vanuit de tijdelijke dataset naar lid BACKUPR
+in de doeldataset, en die vervangt (REPLACE) als die al bestaat */
+"LMCOPY FROMID("SRCDD") TODATAID("TGTDD") TOMEM(BACKUPR) REPLACE"
+
+/* De referentie van de tijdelijke dataset en de doeldataset vrijgeven */
+"LMFREE DATAID("SRCDD")"
+"LMFREE DATAID("TGTDD")"
+
+/* Onze skeletonbibliotheek uit de ISPSLIB-concatenatie verwijderen */
+"LIBDEF ISPSLIB"
+\end{minted}
+\captionof{listing}{\label{mint:JCLRexx}Rexx code voor het gebruiken van ISPF File Tailoring van JCL skeletons}
 
 
-    \begin{minted}[frame=lines, framesep=2mm, linenos]{rexx}
-        /* REXX */
-        
-        /* Definiëren van de variabelen die zullen worden gebruikt in het skeleton */
-        SLIBDS  = 'GENJCL.ISPSLIB'
-        USERID  = USERID()
-        USERIDJ = USERID
-        if LENGTH(USERIDJ) < 8 then do
-        USERIDJ = USERIDJ || 'X'
-        end
-        SRCQUAL = 'MYLIB.SOURCE'
-        TGTQUAL = 'MYLIB.BACKUPR'
-        TGTDISP = 'MOD,CATLG,CATLG'
-        
-        /* Dit geeft aan naar welke omgeving de volgende commando's 
-        gestuurd moeten worden. In dit geval is dat ISPF*/
-        ADDRESS ISPEXEC
-        
-        /* De bibliotheek waar onze skeleton inzit wordt toegevoegd aan een eventueel
-        reeds bestaande ISPSLIB-definitie van ISPF */
-        "LIBDEF ISPSLIB DATASET ID("SLIBDS") STACK"
-        
-        /* Een tijdelijke sequentiële dataset openen om de JCL in op te slaan. */
-        "FTOPEN TEMP"
-        
-        /* Het SKELETON verwerken en alle variabelen substitueren.
-        De gegenereerde uitvoer wordt weggeschreven naar de tijdelijke dataset */
-        "FTINCL SKELETON"
-        
-        /* De naam van de door ISPF aangemaakte tijdelijke dataset ophalen */
-        "VGET ZTEMPN SHARED"
-        
-        /* De tijdelijke dataset sluiten en de gegenereerde JCL afronden */
-        "FTCLOSE"
-        
-        /* De tijdelijke dataset initialiseren voor gebruik door ISPF.
-        DATAID geeft een referentie (SRCDD) terug voor gebruik in latere commando's */
-        "LMINIT DATAID(SRCDD) DDNAME("ZTEMPN")"
-        
-        /* De doeldataset initialiseren voor gebruik door ISPF.
-        DATAID geeft een referentie (TGTDD) terug voor gebruik in latere commando's */
-        "LMINIT DATAID(TGTDD) DATASET('"USERID".GENJCL.JCL')"
-        
-        /* De gegenereerde JCL kopiëren vanuit de tijdelijke dataset naar lid BACKUPR
-        in de doeldataset, en die vervangt (REPLACE) als die al bestaat */
-        "LMCOPY FROMID("SRCDD") TODATAID("TGTDD") TOMEM(BACKUPR) REPLACE"
-        
-        /* De referentie van de tijdelijke dataset en de doeldataset vrijgeven */
-        "LMFREE DATAID("SRCDD")"
-        "LMFREE DATAID("TGTDD")"
-        
-        /* Onze skeletonbibliotheek uit de ISPSLIB-concatenatie verwijderen */
-        "LIBDEF ISPSLIB"
-    \end{minted}
-    \captionof{listing}{\label{mint:JCLRexx}Rexx code voor het gebruiken van ISPF File Tailoring van JCL skeletons}
-
-
-    \begin{minted}[frame=lines, framesep=2mm, linenos]{JCL}
-        //&USERIDJ JOB 'TEST JOB',CLASS=A,MSGCLASS=N
-        //S010    EXEC PGM=IEBCOPY
-        //SYSPRINT DD SYSOUT=*
-        //INDD     DD DISP=SHR,DSN=&USERID..&SRCQUAL
-        //OUTDD    DD DISP=(&TGTDISP),
-        //            DSN=&USERID..&TGTQUAL,
-        //            UNIT=SYSALLDA,SPACE=(TRK,(1,1)),
-        //            DCB=(RECFM=FB,DSORG=PO,LRECL=80),DSNTYPE=LIBRARY
-        //SYSIN    DD *
-        COPY INDD=INDD,OUTDD=OUTDD
-        /*
-        
-    \end{minted}
-    \captionof{listing}{\label{mint:JCLSkeleton}Het JCL skeleton gebruikt door ISPF File Tailoring met Rexx}
+\begin{minted}[frame=lines, framesep=2mm, linenos]{JCL}
+//&USERIDJ JOB 'TEST JOB',CLASS=A,MSGCLASS=N
+//S010    EXEC PGM=IEBCOPY
+//SYSPRINT DD SYSOUT=*
+//INDD     DD DISP=SHR,DSN=&USERID..&SRCQUAL
+//OUTDD    DD DISP=(&TGTDISP),
+//            DSN=&USERID..&TGTQUAL,
+//            UNIT=SYSALLDA,SPACE=(TRK,(1,1)),
+//            DCB=(RECFM=FB,DSORG=PO,LRECL=80),DSNTYPE=LIBRARY
+//SYSIN    DD *
+COPY INDD=INDD,OUTDD=OUTDD
+/*
+\end{minted}
+\captionof{listing}{\label{mint:JCLSkeleton}Het JCL skeleton gebruikt door ISPF File Tailoring met Rexx}
 
 
 \subsubsection{Gegenereerde JCL}
 
-    \begin{minted}[frame=lines, framesep=2mm, linenos]{JCL}
-        //YVG1 JOB 'TEST JOB',CLASS=A,MSGCLASS=N
-        //S010    EXEC PGM=IEBCOPY
-        //SYSPRINT DD SYSOUT=*
-        //INDD     DD DISP=SHR,DSN=YVG1.MYLIB.SOURCE
-        //OUTDD    DD DISP=(MOD,CATLG,CATLG),DSN=YVG1.MYLIB.BACKUPP,
-        //            UNIT=SYSALLDA,SPACE=(TRK,(1,1)),
-        //            DCB=(RECFM=FB,DSORG=PO,LRECL=80),DSNTYPE=LIBRARY
-        //SYSIN    DD *
-        COPY INDD=INDD,OUTDD=OUTDD
-        /*
-    \end{minted}
-    \captionof{listing}{\label{mint:GegenereerdeJCL}Het gegenereerde JCL bestand van zowel de Rexx als Python code}
-
+\begin{minted}[frame=lines, framesep=2mm, linenos]{JCL}
+//YVG1 JOB 'TEST JOB',CLASS=A,MSGCLASS=N
+//S010    EXEC PGM=IEBCOPY
+//SYSPRINT DD SYSOUT=*
+//INDD     DD DISP=SHR,DSN=YVG1.MYLIB.SOURCE
+//OUTDD    DD DISP=(MOD,CATLG,CATLG),
+//            DSN=YVG1.MYLIB.BACKUPP,
+//            UNIT=SYSALLDA,SPACE=(TRK,(1,1)),
+//            DCB=(RECFM=FB,DSORG=PO,LRECL=80),DSNTYPE=LIBRARY
+//SYSIN    DD *
+    COPY INDD=INDD,OUTDD=OUTDD
+/*
+\end{minted}
+\captionof{listing}{\label{mint:GegenereerdeJCL}Het gegenereerde JCL bestand van zowel de Rexx als Python code}
 
 \subsection{Bevindingen}
-Extra bevindingen:
-we slaan de jcl op in een PDS omdat we de code willen analyseren en bekijken. De jcl code zou op zich ook direct kunnen worden uitgevoerd vanuit de code. We moeten een 'X' toevoegen aan de jobnaam in Rexx omdat ISPF anders klaagt. Daarom doen we dat in de code als de jobnaam kleiner is dan 8. Als de JCL rechtsreeks wordt gesubmit is dat niet nodig. Deze PoC doen we Rexx vanuit ISPF en Python vanuit USS. Het manueel aanpassen van de rexx code is niet gebruiksvriendelijk. Dit zou op zijn beurt ook kunnen worden geautomatiseerd, zodat dat proces gebruiksvriendelijk gebeurt. Kan met ISPF screens? Voor Python is zoau nodig om de jcl aan een dataset toe te voegen, maar de jcl kan worden gesubmit via USS door het submit commando \texttt{submit backupp.jcl}. Het neige verschil in JCL uitkomst is dat Rexx die X nodig heeft, maar Python niet. In de skeleton/template worden komma's gezet na bepaalde lijnen, omdat dat commando op de volgende lijn doorgaat. Dat is omdat een lijn maar 80 karakters mag hebben. Een dataset naam is max 44 karakters, dus is het best om die op een aparte lijn te zetten, zodat die niet voorbij de 80 gaat.
+In deze PoC is ervoor gekozen om het Rexx gedeelte volledig in ISPF uit te voeren, en het Python gedeelte in USS. Dit omdat dat de twee omgevingen zijn waarin beide talen voornamelijk worden gebruikt, en waarin ze het best werken. Het is mogelijk om beide omgevingen met elkaar te laten werken, maar dat is hier onnodig.
+
+Het opslaan van de JCL's is niet noodzakelijk voor een correcte werking van de use case. In een realistisch scenario zou de JCL onmiddellijk kunnen worden uitgevoerd vanuit de Rexx of Python code. In deze PoC worden ze opgeslaan, simpelweg om het resultaat te kunnen analyseren.
+
+In de JCL skeleton/template worden aan het einde van bepaalde lijnen komma's toegevoegd. Deze komma's zorgen ervoor dat een JCL commando op de volgende lijn kan doorgaan. Dit is nodig omdat JCL code maximum tot 80 lijnen (72 als de lijn eindigt op een komma) kan gaan, en we niet op voorhand weten hoelang bepaalde placeholders zullen zijn. Datasets zijn maximum 44 karakters lang, dus als de placeholder van een dataset op een aparte lijn wordt geplaatst, is er zeker voldoende ruimte.
+
+Het manueel aanpassen van de Rexx en Python code om de variabelen voor de placeholders te vervangen, is niet gebruiksvriendelijk. Normaal gezien worden skeletons/templates zoals in deze PoC gecombineerd met een gebruiksvriendelijke manier om de variabelen dynamisch aan te passen, zonder in de code te hoeven duiken. Dit zou eventueel een uitbreiding kunnen zijn van de PoC, om gebruik te maken van ISPF screens voor Rexx en bijvoorbeeld de CLI(command line interface) met behulp van het \texttt{argparse} commando voor Python. Op deze manier zouden de variabelen op dynamische wijze kunnen worden aangepast.
+
+\begin{itemize}
+    \item \textbf{Integratie met tools op het mainframe:}
+    Rexx biedt hier opnieuw alle mogelijkheden van het mainframe. ISPF File Tailoring is een ingebouwde mainframedienst, en Rexx kan die dienst rechtstreeks aanspreken via \texttt{ADDRESS ISPEXEC}. Er is geen extra configuratie nodig. Python daarentegen draait in USS, de Unix-omgeving van het mainframe, en heeft geen rechtstreekse toegang tot ISPF-diensten. Om de gegenereerde JCL op te slaan in een z/OS-dataset vanuit Python, is ZOAU nodig. Zonder die tool is schrijven naar een dataset niet mogelijk vanuit USS. Omdat USS wel nog steeds deel is van het mainframe, kan een JCl in USS wel nog steeds worden gesubmit. De integratie met tools op het mainframe hangt in deze PoC dus vooral af van voorkeur van werkomgeving, de traditionele MVS omgeving, of de Unix omgeving. Voor Python kan wel best opnieuw een \texttt{venv} worden opgezet voor het beheren van de externe packages, in dit geval \texttt{Jinja2}.
+    
+    \item \textbf{Integratie met tools buiten het mainframe:}
+    In deze PoC is er geen sprake van integratie met tools buiten het mainframe. Zowel de Rexx- als de Python-code draaien volledig binnen de mainframeomgeving, respectievelijk vanuit ISPF en vanuit USS. De gegenereerde JCL wordt opgeslagen op het mainframe zelf.
+    
+    \item \textbf{Herbruikbaarheid van de code:}
+    Beide implementaties maken gebruik van skeletons of templates, wat de herbruikbaarheid ten goede komt. De variabelen in de code kunnen eenvoudig worden aangepast om andere datasets te kopiëren. Beide implementaties zouden verder kunnen worden uitgebreid met een gebruikersinterface, bijvoorbeeld een ISPF-scherm voor Rexx of een nieuw script voor Python, om de aanpassing van variabelen nog gebruiksvriendelijker te maken.
+    
+    \item \textbf{Security vulnerabilities:}
+    In deze PoC zijn er geen expliciete beveiligingsrisico's aanwezig. Voor beide talen geldt dat de gegenereerde JCL lokaal wordt opgeslagen op het mainframe, zonder dat er gevoelige gegevens naar buiten worden gestuurd. Een aandachtspunt bij Python is dat er deze keer 2 packages worden gebruikt. Het \texttt{os} package is echter een ingebouwde package van Python, dus deze moet niet worden geïnstalleerd naast de installatie van het Python package. Wel wordt er gebruik gemaakt van een andere externe package, namelijk \texttt{Jinja2}. Deze package is opnieuw veelgebruikt en goed onderhouden, maar externe packages brengen altijd een zeker risico met zich mee.
+    
+    \item \textbf{Robuustheid van de code:}
+    Beide implementaties zijn robuust voor het beschreven gebruik. Zolang de \texttt{SOURCE} dataset bestaat en de \texttt{BACKUP} dataset correct is geconfigureerd, zal de gegenereerde JCL correct worden uitgevoerd. Een verschil is dat de Rexx-code afhankelijk is van ISPF-diensten, die altijd beschikbaar zijn op een mainframe. De Python-code daarentegen is afhankelijk van Jinja2, een externe package.
+    
+    \item \textbf{Ondersteuning van de taal:}
+    Voor het schrijven van de Rexx-code is specifieke kennis van ISPF File Tailoring vereist. De officiële IBM-documentatie is beschikbaar maar vrij technisch, en er zijn weinig praktijkvoorbeelden online te vinden. Voor Python en Jinja2 daarentegen is er een overvloed aan documentatie en voorbeelden beschikbaar. Jinja2 is een veelgebruikt templating-pakket dat ook buiten de mainframewereld wijdverspreid is, waardoor het voor programmeurs met een Python-achtergrond laagdrempelig is om mee aan de slag te gaan.
+\end{itemize}
+
+\section{PoC 3: Gebruik van RACF}
+
+\subsection{Python}
+
+\subsection{Rexx}
+
+\subsection{Bevindingen}
 
 \begin{itemize}
     \item \textbf{Integratie met tools op het mainframe:}
@@ -379,6 +403,5 @@ we slaan de jcl op in een PDS omdat we de code willen analyseren en bekijken. De
     
     \item \textbf{Robuustheid van de code:}
     
-    \item \textbf{Ondersteuning van de taal:} 
-    
+    \item \textbf{Ondersteuning van de taal:}
 \end{itemize}
