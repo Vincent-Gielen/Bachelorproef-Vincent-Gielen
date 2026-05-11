@@ -11,3 +11,5 @@ bekijk dump van een file:
 
 activeer virtual environment:
 `. venv/bin/activate` OR `. venv/Script/activate`
+
+s <membername>
