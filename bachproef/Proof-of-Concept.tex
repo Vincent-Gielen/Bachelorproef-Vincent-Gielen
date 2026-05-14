@@ -365,23 +365,23 @@ In de JCL skeleton/template worden aan het einde van bepaalde lijnen komma's toe
 Het manueel aanpassen van de Rexx en Python code om de variabelen voor de placeholders te vervangen, is niet gebruiksvriendelijk. Normaal gezien worden skeletons/templates zoals in deze PoC gecombineerd met een gebruiksvriendelijke manier om de variabelen dynamisch aan te passen, zonder in de code te hoeven duiken. Dit zou eventueel een uitbreiding kunnen zijn van de PoC, om gebruik te maken van ISPF screens voor Rexx en bijvoorbeeld de CLI(command line interface) met behulp van het \texttt{argparse} commando voor Python. Op deze manier zouden de variabelen op dynamische wijze kunnen worden aangepast.
 
 \begin{itemize}
-    \item \textbf{Integratie met tools op het mainframe:}
-    Rexx biedt hier opnieuw alle mogelijkheden van het mainframe. ISPF File Tailoring is een ingebouwde mainframedienst, en Rexx kan die dienst rechtstreeks aanspreken via \texttt{ADDRESS ISPEXEC}. Er is geen extra configuratie nodig. Python daarentegen draait in USS, de Unix-omgeving van het mainframe, en heeft geen rechtstreekse toegang tot ISPF-diensten. Om de gegenereerde JCL op te slaan in een z/OS-dataset vanuit Python, is ZOAU nodig. Zonder die tool is schrijven naar een dataset niet mogelijk vanuit USS. Omdat USS wel nog steeds deel is van het mainframe, kan een JCl in USS wel nog steeds worden gesubmit. De integratie met tools op het mainframe hangt in deze PoC dus vooral af van voorkeur van werkomgeving, de traditionele MVS omgeving, of de Unix omgeving. Voor Python kan wel best opnieuw een \texttt{venv} worden opgezet voor het beheren van de externe packages, in dit geval \texttt{Jinja2}.
+\item \textbf{Integratie met tools op het mainframe:}
+Rexx biedt hier opnieuw alle mogelijkheden van het mainframe. ISPF File Tailoring is een ingebouwde mainframedienst, en Rexx kan die dienst rechtstreeks aanspreken via \texttt{ADDRESS ISPEXEC}. Er is geen extra configuratie nodig. Python daarentegen draait in USS, de Unix-omgeving van het mainframe, en heeft geen rechtstreekse toegang tot ISPF-diensten. Om de gegenereerde JCL op te slaan in een z/OS-dataset vanuit Python, is ZOAU nodig. Zonder die tool is schrijven naar een dataset niet mogelijk vanuit USS. Omdat USS wel nog steeds deel is van het mainframe, kan een JCl in USS wel nog steeds worden gesubmit. De integratie met tools op het mainframe hangt in deze PoC dus vooral af van voorkeur van werkomgeving, de traditionele MVS omgeving, of de Unix omgeving. Voor Python kan wel best opnieuw een \texttt{venv} worden opgezet voor het beheren van de externe packages, in dit geval \texttt{Jinja2}.
     
-    \item \textbf{Integratie met tools buiten het mainframe:}
-    In deze PoC is er geen sprake van integratie met tools buiten het mainframe. Zowel de Rexx- als de Python-code draaien volledig binnen de mainframeomgeving, respectievelijk vanuit ISPF en vanuit USS. De gegenereerde JCL wordt opgeslagen op het mainframe zelf.
+\item \textbf{Integratie met tools buiten het mainframe:}
+In deze PoC is er geen sprake van integratie met tools buiten het mainframe. Zowel de Rexx- als de Python-code draaien volledig binnen de mainframeomgeving, respectievelijk vanuit ISPF en vanuit USS. De gegenereerde JCL wordt opgeslagen op het mainframe zelf.
     
-    \item \textbf{Herbruikbaarheid van de code:}
-    Beide implementaties maken gebruik van skeletons of templates, wat de herbruikbaarheid ten goede komt. De variabelen in de code kunnen eenvoudig worden aangepast om andere datasets te kopiëren. Beide implementaties zouden verder kunnen worden uitgebreid met een gebruikersinterface, bijvoorbeeld een ISPF-scherm voor Rexx of een nieuw script voor Python, om de aanpassing van variabelen nog gebruiksvriendelijker te maken.
+\item \textbf{Herbruikbaarheid van de code:}
+Beide implementaties maken gebruik van skeletons of templates, wat de herbruikbaarheid ten goede komt. De variabelen in de code kunnen eenvoudig worden aangepast om andere datasets te kopiëren. Beide implementaties zouden verder kunnen worden uitgebreid met een gebruikersinterface, bijvoorbeeld een ISPF-scherm voor Rexx of een nieuw script voor Python, om de aanpassing van variabelen nog gebruiksvriendelijker te maken.
     
-    \item \textbf{Security vulnerabilities:}
-    In deze PoC zijn er geen expliciete beveiligingsrisico's aanwezig. Voor beide talen geldt dat de gegenereerde JCL lokaal wordt opgeslagen op het mainframe, zonder dat er gevoelige gegevens naar buiten worden gestuurd. Een aandachtspunt bij Python is dat er deze keer 2 packages worden gebruikt. Het \texttt{os} package is echter een ingebouwde package van Python, dus deze moet niet worden geïnstalleerd naast de installatie van het Python package. Wel wordt er gebruik gemaakt van een andere externe package, namelijk \texttt{Jinja2}. Deze package is opnieuw veelgebruikt en goed onderhouden, maar externe packages brengen altijd een zeker risico met zich mee.
+\item \textbf{Security vulnerabilities:}
+In deze PoC zijn er geen expliciete beveiligingsrisico's aanwezig. Voor beide talen geldt dat de gegenereerde JCL lokaal wordt opgeslagen op het mainframe, zonder dat er gevoelige gegevens naar buiten worden gestuurd. Een aandachtspunt bij Python is dat er deze keer 2 packages worden gebruikt. Het \texttt{os} package is echter een ingebouwde package van Python, dus deze moet niet worden geïnstalleerd naast de installatie van het Python package. Wel wordt er gebruik gemaakt van een andere externe package, namelijk \texttt{Jinja2}. Deze package is opnieuw veelgebruikt en goed onderhouden, maar externe packages brengen altijd een zeker risico met zich mee.
     
-    \item \textbf{Robuustheid van de code:}
-    Beide implementaties zijn robuust voor het beschreven gebruik. Zolang de \texttt{SOURCE} dataset bestaat en de \texttt{BACKUP} dataset correct is geconfigureerd, zal de gegenereerde JCL correct worden uitgevoerd. Een verschil is dat de Rexx-code afhankelijk is van ISPF-diensten, die altijd beschikbaar zijn op een mainframe. De Python-code daarentegen is afhankelijk van Jinja2, een externe package.
+\item \textbf{Robuustheid van de code:}
+Beide implementaties zijn robuust voor het beschreven gebruik. Zolang de \texttt{SOURCE} dataset bestaat en de \texttt{BACKUP} dataset correct is geconfigureerd, zal de gegenereerde JCL correct worden uitgevoerd. Een verschil is dat de Rexx-code afhankelijk is van ISPF-diensten, die altijd beschikbaar zijn op een mainframe. De Python-code daarentegen is afhankelijk van Jinja2, een externe package.
     
-    \item \textbf{Ondersteuning van de taal:}
-    Voor het schrijven van de Rexx-code is specifieke kennis van ISPF File Tailoring vereist. De officiële IBM-documentatie is beschikbaar maar vrij technisch, en er zijn weinig praktijkvoorbeelden online te vinden. Voor Python en Jinja2 daarentegen is er een overvloed aan documentatie en voorbeelden beschikbaar. Jinja2 is een veelgebruikt templating-pakket dat ook buiten de mainframewereld wijdverspreid is, waardoor het voor programmeurs met een Python-achtergrond laagdrempelig is om mee aan de slag te gaan.
+\item \textbf{Ondersteuning van de taal:}
+Voor het schrijven van de Rexx-code is specifieke kennis van ISPF File Tailoring vereist. De officiële IBM-documentatie is beschikbaar maar vrij technisch, en er zijn weinig praktijkvoorbeelden online te vinden. Voor Python en Jinja2 daarentegen is er een overvloed aan documentatie en voorbeelden beschikbaar. Jinja2 is een veelgebruikt templating-pakket dat ook buiten de mainframewereld wijdverspreid is, waardoor het voor programmeurs met een Python-achtergrond laagdrempelig is om mee aan de slag te gaan.
 \end{itemize}
 
 %\section{PoC : Interactief gebruik van JCL skeletons/templates}
@@ -406,24 +406,35 @@ Het manueel aanpassen van de Rexx en Python code om de variabelen voor de placeh
 %    \item \textbf{Ondersteuning van de taal:}
 %\end{itemize}
 
-%\section{PoC 3: Gebruik van RACF}
+\section{PoC 3: Gebruik van RACF}
 
-%\subsection{Python}
+\subsection{Python}
+Uitleg
 
-%\subsection{Rexx}
+\begin{minted}[frame=lines, framesep=2mm, linenos]{python}
 
-%\subsection{Bevindingen}
+\end{minted}
+\captionof{listing}{\label{mint:RACFPython}Python code voor het gebruiken van RACF}
 
-%\begin{itemize}
-%    \item \textbf{Integratie met tools op het mainframe:}
+\subsection{Rexx}
+Uitleg
+\begin{minted}[frame=lines, framesep=2mm, linenos]{rexx}
     
-%    \item \textbf{Integratie met tools buiten het mainframe:}
+\end{minted}
+\captionof{listing}{\label{mint:RACFRexx}Rexx code voor het gebruiken van RACF}
+
+\subsection{Bevindingen}
+Extra bevindingen
+\begin{itemize}
+\item \textbf{Integratie met tools op het mainframe:}
     
-%    \item \textbf{Herbruikbaarheid van de code:}
+\item \textbf{Integratie met tools buiten het mainframe:}
     
-%    \item \textbf{Security vulnerabilities:}
+\item \textbf{Herbruikbaarheid van de code:}
     
-%    \item \textbf{Robuustheid van de code:}
+\item \textbf{Security vulnerabilities:}
     
-%    \item \textbf{Ondersteuning van de taal:}
-%\end{itemize}
+\item \textbf{Robuustheid van de code:}
+    
+\item \textbf{Ondersteuning van de taal:}
+\end{itemize}
