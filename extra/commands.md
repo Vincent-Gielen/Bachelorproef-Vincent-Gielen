@@ -14,3 +14,6 @@ activeer virtual environment:
 
 selecteer member in list op ISPF:
 `s <membername>`
+
+kopieer een USS file naar dataset
+`result = subprocess.run(['/bin/cp', '-P', 'RECFM=FB,LRECL=80', '/tmp/inactive.txt', f"//'{dataset}'"], capture_output=True, text=True)`

@@ -407,19 +407,163 @@ Voor het schrijven van de Rexx-code is specifieke kennis van ISPF File Tailoring
 %\end{itemize}
 
 \section{PoC 3: Gebruik van RACF}
-
+In deze PoC wordt gebruik gemaakt van RACF om een lijst van users te verkrijgen die al 3 maanden of langer inactief zijn. Deze lijst van gebruikers wordt omgezet in een sequentiële dataset, die later kan gebruikt worden in bijvoorbeeld een batch job, om de toegang van deze gebruikers in te perken.
+ 
 \subsection{Python}
-Uitleg
+Uitleg Python
 
 \begin{minted}[frame=lines, framesep=2mm, linenos]{python}
+# importeren van externe packages zoals SEAR
+from sear import sear
+from datetime import datetime
+import subprocess
 
+# Gebruik van datetime en een array voor de inactieve gebruikers
+today = datetime.today()
+inactive_users = []
+
+# Haal alle RACF gebruikers op met behulp van SEAR
+users = sear(
+    {
+        "operation": "search",
+        "admin_type": "user",
+    },
+)
+
+# Loop over alle gebruikers
+for i in range(0, len(users.result['profiles'])):
+    user = users.result['profiles'][i]
+    
+    # Haal per gebruiker de gebruikersinformatie op
+    userdetail = sear(
+        {
+            "operation": "extract",
+            "admin_type": "user",
+            "userid": user,
+        },
+    )
+    
+    # Controleer of de aanvraag geslaagd is
+    if userdetail.result['return_codes']['sear_return_code'] == 0:
+    
+        # Controleer of de laatste toegangsdatum beschikbaar is
+        if 'base:last_access_date' in userdetail.result['profile']['base']:
+            lastdate = userdetail.result['profile']['base']['base:last_access_date']
+            # Zet de datum om van string naar datetime object
+            lastdate_parsed = datetime.strptime(lastdate, '%m/%d/%y')
+            
+            # Bereken het verschil in dagen
+            diffdays = (today - lastdate_parsed).days
+            # Voeg de gebruiker toe aan de lijst als hij meer dan 90 dagen inactief is
+            if diffdays > 90:
+                inactive_users.append(f"{user} : {diffdays}")
+
+# Schrijf de inactieve gebruikers naar een tijdelijk USS bestand
+with open('/tmp/inactive.txt', 'wb') as f:
+    for line in inactive_users:
+        f.write((line + '\n').encode('cp1047'))
+
+dataset = "YVG1.RACFP.INACTIVE"
+
+# Verwijder de oude en voeg een nieuwe sequential dataset toe
+delete = subprocess.run(['tsocmd', f"DELETE '{dataset}'"], capture_output=True, text=True)
+alloc = subprocess.run(
+    ['tsocmd', f"ALLOC DA('{dataset}') NEW CATALOG RECFM(FB) LRECL(80) BLKSIZE(8000) SPACE(1,1) TRACKS"],capture_output=True, text=True
+    )
+
+# Controleer of het aanmaken geslaagd is
+if alloc.returncode != 0:
+    print("Fout bij aanmaken dataset:", alloc.stderr)
+else:
+    # Kopieer het tijdelijke USS bestand naar de dataset
+    result = subprocess.run(['/bin/cp', '-P', 'RECFM=FB,LRECL=80', '/tmp/inactive.txt', f"//'{dataset}'"], capture_output=True, text=True)
+    
+    # Controleer of het kopiëren geslaagd is
+    if result.returncode != 0:
+        print("Fout bij kopiëren naar dataset:", result.stderr)
+    else:
+        print(f"{len(inactive_users)} regels geschreven naar {dataset}")
 \end{minted}
 \captionof{listing}{\label{mint:RACFPython}Python code voor het gebruiken van RACF}
 
 \subsection{Rexx}
-Uitleg
+Uitleg Rexx
+
 \begin{minted}[frame=lines, framesep=2mm, linenos]{rexx}
+/* REXX */
+ADDRESS TSO
+
+/* Vandaag als aantal sinds 01/01/0001 en een lijst van inactieve gebruikers */
+TODAY = DATE('B')
+INACTIVE. = ''
+INACTIVE.0 = 0
+
+/* Haal alle RACF gebruikers op en sla ze op in de USERS. stem */
+x = OUTTRAP('USERS.')
+'SR CLASS(USER)'
+x = OUTTRAP('OFF')
+
+/* Loop over alle gebruikers */
+DO I = 1 TO USERS.0
+    USER = STRIP(USERS.I)
+    /* Haal per gebruiker de informatie op via het LU commando */
+    x = OUTTRAP('USERINFO.')
+    'LU' USER
+    x = OUTTRAP('OFF')
     
+    /* Zoek naar de LAST-ACCESS regel in de gebruikersinformatie */
+    DO J = 1 TO USERINFO.0
+        IF LEFT(USERINFO.J, 13) = ' LAST-ACCESS='
+        THEN DO
+            /* Haal de laatste toegangsdatum op uit de regel */
+            PARSE VAR USERINFO.J ' LAST-ACCESS=' LASTDATE '/' .
+            
+            /* Sla gebruikers met UNKNOWN datum over */
+            IF LASTDATE \= 'UNKNOWN'
+            THEN DO
+                /* Formaateer de datum zoals de TODAY variabele */
+                PARSE VAR LASTDATE LASTDATEYEAR '.' LASTDATEDAY
+                LASTDATEJUL  = LASTDATEYEAR || LASTDATEDAY
+                LASTDATEBASE = DATE('B', LASTDATEJUL, 'J')
+                
+                /* Bereken het verschil in dagen */
+                DIFFDAYS = TODAY - LASTDATEBASE
+                /* Voeg de gebruiker toe aan de lijst als hij meer dan 90 dagen inactief is */
+                IF DIFFDAYS > 90
+                THEN DO
+                    COUNTER = INACTIVE.0 + 1
+                    INACTIVE.COUNTER = USER ':' DIFFDAYS
+                    INACTIVE.0 = COUNTER
+                END
+            END
+        END
+    END
+END
+
+/* Verwijder de oude en voeg een nieuwe sequential dataset toe  */
+DATASET = 'RACFR.INACTIVE'
+'DELETE' DATASET
+'ALLOC FI(OUTFILE) DA('DATASET') NEW CATALOG',
+'RECFM(F B) LRECL(80) BLKSIZE(8000) SPACE(1,1) TRACKS'
+
+/* Controleer of de toewijzing geslaagd is */
+IF RC \= 0 THEN
+DO
+SAY 'ERROR: Could not allocate dataset, RC=' RC
+EXIT RC
+END
+
+/* Schrijf alle inactieve gebruikers naar de dataset */
+'EXECIO' INACTIVE.0 'DISKW OUTFILE (STEM INACTIVE. FINIS)'
+
+/* Controleer of het schrijven geslaagd */
+IF RC \= 0 THEN
+SAY 'ERROR: Could not write to dataset, RC=' RC
+ELSE
+SAY INACTIVE.0 'records written to' DATASET
+
+/* Geef het bestand vrij */
+'FREE FI(OUTFILE)'
 \end{minted}
 \captionof{listing}{\label{mint:RACFRexx}Rexx code voor het gebruiken van RACF}
 
