@@ -407,18 +407,18 @@ Voor het schrijven van de Rexx-code is specifieke kennis van ISPF File Tailoring
 %\end{itemize}
 
 \section{PoC 3: Gebruik van RACF}
-In deze PoC wordt gebruik gemaakt van RACF om een lijst van users te verkrijgen die al 3 maanden of langer inactief zijn. Deze lijst van gebruikers wordt omgezet in een sequentiële dataset, die later kan gebruikt worden in bijvoorbeeld een batch job, om de toegang van deze gebruikers in te perken.
+In deze PoC wordt gebruik gemaakt van RACF om een lijst van gebruikers te verkrijgen die al 3 maanden of langer inactief zijn. Deze lijst van gebruikers wordt omgezet in een sequentiële dataset, die later kan gebruikt worden in bijvoorbeeld een batch job, om de toegang van deze gebruikers in te perken.
  
 \subsection{Python}
-Uitleg Python
+In de Python code van \ref{mint:RACFPython} wordt gebruikt gemaakt van SEAR om te communiceren met RACF. Eerst worden alle gebruikers opgehaald. Als SEAR geen foutmelding geeft, wordt er een Python dictionary teruggegeven, waaruit de laatste inlogdatum \texttt{last\_access\_date} van elke gebruiker wordt opgehaald. Deze wordt vergeleken met de datum van vandaag, en als het verschil groter is dan 90, wordt de gebruiker toegevoegd aan een lijst. Als alle gebruikers zijn toegevoegd, worden ze weggeschreven naar een tijdelijk bestand op USS. Om de lijst van gebruikers beschikbaar te maken als dataset, wordt een sequentiële dataset \texttt{YVG1.RACFP.INACTIVE} aangemaakt (deze wordt eerst verwijderd indien die al bestaat). Indien succesvol, wordt het bestand met inactieve gebruikers gekopieerd met behulp van het commando \texttt{/bin/cp}.
 
 \begin{minted}[frame=lines, framesep=2mm, linenos]{python}
-# importeren van externe packages zoals SEAR
+# Enkele Python packages, zoals SEAR, worden geimporteerd
 from sear import sear
 from datetime import datetime
 import subprocess
 
-# Gebruik van datetime en een array voor de inactieve gebruikers
+# Gebruik van datetime en een lijst voor de inactieve gebruikers
 today = datetime.today()
 inactive_users = []
 
@@ -487,7 +487,7 @@ else:
 \captionof{listing}{\label{mint:RACFPython}Python code voor het gebruiken van RACF}
 
 \subsection{Rexx}
-Uitleg Rexx
+In de Rexx code van \ref{mint:RACFRexx} wordt gebruik gemaakt van de TSO omgeving om te communiceren met RACF. Alle gebruikers worden opgelijst en in de STEM variabele \texttt{USERS.} gestoken. Daarna wordt per gebruiker de informatie uit het \texttt{LU} commando opnieuw in een STEM variabele \texttt{USERINFO.} opgeslaan. Met behulp van het \texttt{PARSE VAR} commando wordt het attribuut met de laatste inlogdatum bijgehouden. Deze datum wordt omgezet naar een formaat dat het gemakkelijker maakt om mee te rekenen. Als het verschil met de datum van vandaag groter is dan 90, wordt de gebruiker toegevoegd aan de \texttt{INACTIVE.} STEM variabele. Als alle users zijn overlopen, wordt een nieuwe sequentiële dataset \texttt{YVG1.RACFR.INACTIVE} aangemaakt (de oude wordt verwijderd indien die al bestaat), en worden alle inactieve gebruikers daar naartoe geschreven.
 
 \begin{minted}[frame=lines, framesep=2mm, linenos]{rexx}
 /* REXX */
@@ -569,6 +569,10 @@ SAY INACTIVE.0 'records written to' DATASET
 
 \subsection{Bevindingen}
 Extra bevindingen
+als de user net is aangemaakt, maar nog niet gebruikt werkt het niet.
+Wat er gebeurt met de users is hier niet van belang. Dit idee is gebruikt om te tonen wat de mogelijkheden zijn. Het is bvb beter om users te revoken ipv verwijderen, en er moeten zeker nog andere checks worden gedaan. last-connect is een betere, maar dat beinvloedt de use case niet, het maakt hem alleen minder realistisch. Er zijn ook dingen die invloed kunnen hebben op of dat datum wel wordt aangepast. dus het sowieso geen goede echte use case
+Er zijn ook al bestaande tools die doen wat ik hier manueel doe, maar opnieuw het is gewoon om beide talen met racf te laten werken.
+
 \begin{itemize}
 \item \textbf{Integratie met tools op het mainframe:}
     
