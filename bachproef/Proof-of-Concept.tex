@@ -476,10 +476,10 @@ if alloc.returncode != 0:
     print("Fout bij aanmaken dataset:", alloc.stderr)
 else:
     # Kopieer het tijdelijke USS bestand naar de dataset
-    result = subprocess.run(['/bin/cp', '-P', 'RECFM=FB,LRECL=80', '/tmp/inactive.txt', f"//'{dataset}'"], capture_output=True, text=True)
+    copy = subprocess.run(['/bin/cp', '-P', 'RECFM=FB,LRECL=80', '/tmp/inactive.txt', f"//'{dataset}'"], capture_output=True, text=True)
     
     # Controleer of het kopiëren geslaagd is
-    if result.returncode != 0:
+    if copy.returncode != 0:
         print("Fout bij kopiëren naar dataset:", result.stderr)
     else:
         print(f"{len(inactive_users)} regels geschreven naar {dataset}")
@@ -568,21 +568,28 @@ SAY INACTIVE.0 'records written to' DATASET
 \captionof{listing}{\label{mint:RACFRexx}Rexx code voor het gebruiken van RACF}
 
 \subsection{Bevindingen}
-Extra bevindingen
-als de user net is aangemaakt, maar nog niet gebruikt werkt het niet.
-Wat er gebeurt met de users is hier niet van belang. Dit idee is gebruikt om te tonen wat de mogelijkheden zijn. Het is bvb beter om users te revoken ipv verwijderen, en er moeten zeker nog andere checks worden gedaan. last-connect is een betere, maar dat beinvloedt de use case niet, het maakt hem alleen minder realistisch. Er zijn ook dingen die invloed kunnen hebben op of dat datum wel wordt aangepast. dus het sowieso geen goede echte use case
-Er zijn ook al bestaande tools die doen wat ik hier manueel doe, maar opnieuw het is gewoon om beide talen met racf te laten werken.
+De use case voor deze PoC, het ophalen van gebruikers en toevoegen aan een lijst aan de hand van de laatste inlogdatum, is niet heel realistisch. Er zijn verschillende redenen waarom de use case niet in een echte productie-omgeving zou werken. Er zijn edge-cases, zoals een gebruiker die net is aangemaakt maar nog niet gebruikt, die niet worden meegerekend. Daarnaast bestaan er al betere tools om de inlogdatum van een gebruiker op te halen. Daarom moet worden genuanceerd dat deze PoC enkel bedoeld is om de mogelijkheden van Rexx en Python met RACF te tonen. Er moet worden gekeken naar de ruimere implicatie van deze use case, dat is dat gegevens kunnen worden opgehaald met behulp van RACF, en bepaalde checks kunnen worden gedaan op basis van die gegevens.
+
+Deze use case bestaat uit 2 delen. Als eerste wordt het gebruik van RACF met Rexx en Python aangetoond. Als tweede wordt een dataset aangemaakt, waarin de gegevens worden opgeslaan. Beide delen kunnen los van elkaar worden gezien. Deze twee delen zijn samengenomen om nog meer aspecten van de integratie met het mainframe te vergelijken zonder voor elk aspect een nieuwe PoC te moeten maken.
+
+In de Python code wordt de lijst van inactieve gebruikers tijdelijk opgeslaan in een USS bestand. Daarvoor wordt \texttt{encode('cp1047')} gebruikt om de ervoor te zorgen dat de inhoud van dat bestand leesbaar is door services op het mainframe. Dit is mogelijks niet per se nodig, maar vanwege eerdere problemen met filetags is dit voor de zekerheid toegevoegd.
 
 \begin{itemize}
 \item \textbf{Integratie met tools op het mainframe:}
+Dankzij SEAR kan Python zonder problemen communiceren met RACF. Python maakt via SEAR gebruik van de RACF API en kan zo de gegevens uit RACF ophalen en gebruiken. Daarnaast kan Python via de ingebouwde \texttt{subprocess} functionaliteit TSO commando's uitvoeren om een dataset te verwijderen en aan te maken, alsook een bestaand USS bestand ernaartoe te kopiëren. Voor Rexx zijn al de bovenstaande zaken vanzelfsprekend. De TSO-omgeving kan worden opgezet, en vandaar kunnen verschillende RACF commando's worden uitgevoerd. Ook het verwijderen en aanmaken van een dataset, en het wegschrijven van gegevens naar die dataset, kan zonder problemen worden uitgevoerd.
     
 \item \textbf{Integratie met tools buiten het mainframe:}
+In deze PoC is er opnieuw geen of amper sprake van integratie met tools buiten het mainframe. Bij Python is er wel sprake van communicatie met de RACF API, wat via HTTP gebeurt. SEAR stuurt HTTP requests naar een REST API die op het mainframe draait, en krijgt de gevraagde RACF gegevens terug in JSON formaat. Deze gestandaardiseerde communicatie heeft als voordeel dat dezelfde RACF gegevens in theorie ook bereikbaar zijn vanop een extern systeem, zolang de API bereikbaar is. Rexx daarentegen communiceert rechtstreeks met RACF via TSO commando's, zonder gebruik te maken van HTTP of een tussenliggende API. Dit maakt Rexx sneller en directer, maar beperkt de toegang tot RACF tot de TSO omgeving zelf. 
     
 \item \textbf{Herbruikbaarheid van de code:}
+De Python code maakt gebruik van SEAR, wat ervoor zorgt dat de RACF requests gemakkelijk kunnen worden hergebruikt zonder enige aanpassingen. Ook het verwijderen en aanmaken van de dataset, en het kopiëren van de gegevens zijn volledig herbruikbaar. De Python code zou technisch gezien volledig kunnen worden opgesplitst. Voor de Rexx code zijn verschillende zaken ook herbruikbaar, zoals de RACF commando's. Het verwerken van de gebruikersinfo, waar gebruik wordt gemaakt van \texttt{PARSE VAR} om het \texttt{LAST-ACCESS} attribuut te verkrijgen is, hoewel iets minder intuïtief, ook herbruikbaar.
     
 \item \textbf{Security vulnerabilities:}
+Voor Python worden 3 Python packages geïmporteerd. Slechts 1 van die 3 packages, SEAR, is een externe package. SEAR is gebaseerd op een officieel project van IBM, RACFu, dat is stopgezet. SEAR wordt ontwikkeld door enkele welgekende mainframers, zoals Emma, die een interview deed voor dit onderzoek, en Bobby, die de co-promotor is van dit onderzoek. Daarom kunnen we ervan uitgaan dat de SEAR package veilig is. Deze conclusie is echter gebaseerd op een subjectieve mening van betrouwbaarheid van de developers van de package. Dit maakt de package niet 100\% veilig.
     
 \item \textbf{Robuustheid van de code:}
+Opnieuw speelt de afhankelijkheid van Python van een extern package zoals SEAR hier een rol. De TSO omgeving die door Rexx wordt gebruikt zal altijd beschikbaar zijn. In het geval van SEAR kan een bepaalde versie van z/OS of Python fouten geven. Hoewel dit goed wordt gedocumenteerd door het development team, geeft dit wel een negatieve deuk in de robuustheid van de code. Python heeft ook een extra kwetsbaarheid in de code, namelijk dat er eerst een tijdelijk USS bestand moet worden aangemaakt. Dit is echter eerder een keuze voor gemak, dan een noodzakelijkheid.
     
 \item \textbf{Ondersteuning van de taal:}
+Voor beide talen is in dit geval voldoende documentatie en kennis beschikbaar om snel een werkend programma te hebben. In het geval van Python is de documentatie van SEAR gemakkelijk te vinden en heel duidelijk. Voor het kopiëren van het USS bestand naar een dataset geldt hetzelfde. Een korte vraag aan de community en onderzoek naar het \texttt{subprocess} package en het \texttt{/bin/cp} commando, gaven een goed resultaat. Voor Rexx is er meer specifieke RACF kennis nodig om bepaalde commando's uit te voeren, en de output ervan te begrijpen. Het verwijderen en aanmaken van een dataset, en het kopiëren van de gegevens zijn algemene Rexx kennis en zijn ook gemakkelijk te vinden in de IBM documentatie.
 \end{itemize}

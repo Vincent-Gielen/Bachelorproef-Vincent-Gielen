@@ -135,4 +135,6 @@ sympy-plots-for-*.tex/
 output/
 out/
 
+extra/
+
 *.latexmkrc
