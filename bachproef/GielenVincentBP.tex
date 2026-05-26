@@ -13,6 +13,12 @@
 \usepackage{lipsum} % For blind text, can be removed after adding actual content
 \usepackage{pifont}
 \usepackage{csquotes}
+\usepackage[toc,acronym]{glossaries}
+
+\makeglossaries
+
+\newacronym{api}{API}{Application Programming Interface}
+\newacronym{ai}{AI}{Artificiële intelligentie}
 
 %% Pictures to include in the text can be put in the graphics/ folder
 \graphicspath{{../graphics/}}
@@ -46,14 +52,15 @@
     \listof{listing}{\listoflistingscaption}%
 }
 
+
 % Other packages not already included can be imported here
 
 %%---------- Document metadata -------------------------------------------------
-% TODO: Replace this with your own information
+% Replace this with your own information
 \author{Vincent Gielen}
 \supervisor{Dhr. L. Blondeel}
 \cosupervisor{Dhr. B. Tjassens Keiser}
-\title[Optionele ondertitel]%
+\title%[Een vergelijkende studie met zicht op de toekomst]
     {Een analyse van REXX en Python voor automatisatie op z/OS}
 \academicyear{\advance\year by -1 \the\year--\advance\year by 1 \the\year}
 \examperiod{1}
@@ -120,6 +127,9 @@
 % Als je een lijst van afkortingen of termen wil toevoegen, dan hoort die
 % hier thuis. Gebruik bijvoorbeeld de ``glossaries'' package.
 % https://www.overleaf.com/learn/latex/Glossaries
+\printglossary
+\printglossary[type=\acronymtype, title=Lijst van afkortingen, toctitle=Lijst van afkortingen]
+
 
 %---------- Kern ---------------------------------------------------------------
 
@@ -141,7 +151,7 @@
 % vormen. De structuur en titels hangen af van je eigen onderzoek. Je kan bv.
 % elke fase in je onderzoek in een apart hoofdstuk bespreken.
 
-%\input{...}
+\input{resultaten}
 %\input{...}
 %...
 
@@ -175,7 +185,7 @@ Mainframe is een van de oudste technologieën in de computerwetenschappen. Mainf
 
 
 %%---------- Andere bijlagen --------------------------------------------------
-% TODO: Voeg hier eventuele andere bijlagen toe. Bv. als je deze BP voor de
+% Voeg hier eventuele andere bijlagen toe. Bv. als je deze BP voor de
 % tweede keer indient, een overzicht van de verbeteringen t.o.v. het origineel.
 %\input{...}
 
