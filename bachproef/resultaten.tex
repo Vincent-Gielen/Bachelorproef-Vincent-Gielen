@@ -15,7 +15,7 @@ Ten tweede zou in een ideaal onderzoek gebruik kunnen worden gemaakt van een sys
 Als derde is het ook belangrijk om te weten dat dit onderzoek vrij klein is van aard. Er zijn slechts 3 use cases uitgevoerd, terwijl er in de mainframe omgeving tal van andere mogelijkheden zijn. En hoewel er over het algemeen een gelijkaardige lijn kan worden getrokken tussen de resultaten van de uitgevoerde use cases in dit onderzoek, moeten er meer use cases worden uitgevoerd om een toereikende dataset te verkrijgen waaruit meer conclusies kunnen worden getrokken. Een gerelateerde beperking ligt ook bij het feit dat in dit onderzoek, door de beperkte hoeveelheid use cases, enkel use cases zijn uitgevoerd die wel degelijk mogelijk zijn voor beide talen om uit te voeren, en die daarbij degelijke bevindingen zouden opleveren. Een voorbeeld daarvan is het opstarten van een LPAR. Als even wordt genegeerd dat het gebruikte systeem niet in staat was om zo een use case uit te voeren, dan zou de vergelijking zelf ook niet veel discussie opleveren, aangezien een LPAR opstarten enkel kan gedaan worden door gebruik te maken van Rexx, of dat toch veruit de beste manier is. Zo een conclusie zou niet veel bijdragen aan de bevindingen die nodig zijn om dit onderzoek waardevol te maken.
 
 \subsection{Out of scope}
-Als laatste zijn er bepaalde zaken die buiten de scope van het uitgevoerde onderzoek gaan, maar die wel impact kunnen hebben op de beslissing om de ene taal boven de andere te verkiezen. Deze zaken moeten in toekomstig onderzoek meer in detail worden onderzocht, zodat hier precieze en accurate conclusies uit kunnen worden getrokken.
+Als laatste zijn er bepaalde zaken die buiten de scope van het uitgevoerde onderzoek vallen, maar die wel impact kunnen hebben op de beslissing om de ene taal boven de andere te verkiezen. Deze zaken zouden in toekomstig onderzoek meer in detail kunnen worden onderzocht, zodat hier precieze en accurate conclusies uit kunnen worden getrokken.
 \begin{itemize}
     \item IBM maakt gebruik van een prijsmechanisme waarbij het gebruik van Python, omdat Python kan draaien op zIIP, ervoor kan zorgen dat de kosten van de workloads goedkoper uitkomen dan bij Rexx. De impact hiervan kan wellicht sterk verschillen per systeem en bedrijf, en werd niet verder onderzocht in dit onderzoek.
     \item In de requirementsanalyse werd reeds vermeld dat 'de hoeveelheid mensen die nu en in de toekomst de taal zal beheren' niet zal gebruikt worden als requirement in dit onderzoek, omdat die stelling moeilijk te meten valt, en daarnaast geen invloed heeft op hoe bepaalde use cases worden uitgevoerd. Dit is echter wel een belangrijke requirement voor bedrijven om rekening mee te houden op de lange termijn.
@@ -24,51 +24,51 @@ Als laatste zijn er bepaalde zaken die buiten de scope van het uitgevoerde onder
 
 \section{Bevindingen PoC's}
 \subsection{Extra bevindingen}
-De voornaamste extra bevinding heeft te maken met de codering van bestanden op het mainframe. Dit is een bekend probleem, waar veel mainframers tegen aanlopen, ongeacht hun ervaringsniveau. Bepaalde bestanden kunnen een andere filetag hebben aan de hand van waar ze worden aangemaakt, en de inhoud van die bestanden volgt dan de codering van het bestand. Als per ongeluk de verkeerde codering is gebruikt, moet een nieuw bestand worden aangemaakt, en moet de inhoud van het bestaande bestand ook worden omgezet naar de juiste codering. Over het algemeen geldt dat Python code in Unicode wordt geschreven en Rexx code in EBCDIC. In hoeverre dit een probleem is dat kan worden toegewezen aan een van beide talen is niet duidelijk, aangezien in dit onderzoek vooral de prioriteit werd gegeven aan het oplossen van de codering problemen en niet zozeer aan het oordelen van de oorsprong van deze complexiteit.
+De voornaamste extra bevinding heeft te maken met de codering van bestanden op het mainframe. Dit is een bekend probleem, waar veel mainframers tegen aanlopen, ongeacht hun ervaringsniveau. Bepaalde bestanden kunnen een andere filetag hebben afhankelijk van waar ze worden aangemaakt, en de inhoud van die bestanden volgt dan de codering van het bestand. Als per ongeluk de verkeerde codering is gebruikt, moet een nieuw bestand worden aangemaakt, en moet de inhoud van het bestaande bestand ook worden omgezet naar de juiste codering. Over het algemeen geldt dat Python code in Unicode wordt geschreven en Rexx code in EBCDIC. In hoeverre dit een probleem is dat kan worden toegewezen aan een van beide talen is niet duidelijk, aangezien in dit onderzoek vooral de prioriteit werd gegeven aan het oplossen van de codering problemen en niet zozeer aan het oordelen van de oorsprong ervan.
 
 Enkele andere bevindingen:
 \begin{itemize}
     \item Een Rexx bestand heeft een \texttt{chmod +x} commando nodig om op USS te worden uitgevoerd.
     \item Rexx code mag niet voorbij 80 lijnen gaan. Vaak worden TSO of ISPF commando's uitgevoerd in Rexx, die op een lijn meer dan 80 karakters hebben. In dat geval kan gebruik worden gemaakt van de komma in Rexx om op de volgende lijn verder te gaan.
     \item Python kan enkel op USS worden gebruikt. Anders dan Rexx, dat ook (en voornamelijk) buiten USS wordt gebruikt, kan Python alleen maar worden gebruikt binnen de USS omgeving van z/OS.
+    \item Voor het developen van de meeste (Python) code werd gebruik gemaakt van VS Code, en het open source project van Zowe die in VS Code de Zowe explorer gratis ter beschikking stellen. Dankzij Zowe Explorer kunnen datasets en USS bestanden en zelfs de output van JCL jobs worden bekijken en bewerkt vanuit VS Code. Aangezien VS Code een populaire code editor is (bij de jongere generatie), kan dit de toegankelijkheid en gebruiksvriendelijkheid van mainframes in het algemeen zeker ten goede komen.
 \end{itemize}
 
 \subsection{Requirements}
+
+\subsubsection{Integratie met tools op het mainframe:}
 \begin{itemize}
-    \item \textbf{Integratie met tools op het mainframe:}
-    
-    \textbf{Rexx} werkt zoals verwacht zonder enige problemen samen met andere tools op het mainframe. Vanuit Rexx kunnen zowel TSO als ISPF commando's worden uitgevoerd, vanwaar verschillende andere utilities kunnen worden aangeroepen. Deze utilities blijven altijd beschikbaar en geven weinig tor geen problemen.
-    
-    \textbf{Python} heeft vaak de juiste omgeving en tools nodig om dezelfde functionaliteiten als Rexx te gebruiken. Python is enkel beschikbaar in de USS omgeving van mainframe, waar eventueel een virtuele omgeving moet worden opgezet om externe packages te installeren. Python heeft niet zomaar toegang tot alle functionaliteiten van Rexx, en is vaak afhankelijk van reeds gebouwde functionaliteiten door IBM, of door open source projecten zoals SEAR. Als deze functionaliteiten bestaan, kunnen ze worden geïnstalleerd of opgezet, en dan kan Python deze taken vaak zonder problemen uitvoeren. Als ze (nog) niet bestaan, is dat meestal onmogelijk.
-    
-    \item \textbf{Integratie met tools buiten het mainframe:}
-    
-    \textbf{Rexx} kan vaak wel op een of andere manier samenwerken met tools buiten het mainframe. Voor bepaalde use cases bestaan IBM tools, en voor andere kan er gepuzzeld worden met bestaande tools zoals curl. Over het algemeen voelen deze oplossingen echter ingewikkeld en stroef aan. Er zijn geen duidelijke richtlijnen of standaardisatie, en er moet hier en daar manueel worden gewerkt op een manier die niet al te robuust aanvoelt (meer hierover bij robuustheid van de code).
-    
-    \textbf{Python} heeft tal van built-in functionaliteiten, en kan daarnaast ook gebruikmaken van een gigantische verzameling van externe libraries, die nog veel meer functionaliteiten kunnen aanleveren. Het communiceren met API's, iets dat tegenwoordig meer en meer nodig is, kan zonder probleem. Python kan daarnaast goed met verschillende formaten van buiten het mainframe werken, zoals JSON. Python is gemaakt, en wordt voortdurend uitgebreid, om enorm veel zaken te kunnen doen, ver buiten enkel het mainframe. Dit zorgt ervoor dat alles buiten het mainframe automatisch beter verloopt met Python.
-    
-    \item \textbf{Herbruikbaarheid van de code:}
-    
-    \textbf{Rexx} vergt, afhankelijk van de use case, heel wat werk en manuele aanpassingen als de code wordt hergebruikt. Ook modularisatie van de code is niet vanzelfsprekend. Het gebruik van TSO en ISPF commando's zijn het meest herbruikbaar, omdat hier op voorhand keywords kunnen worden aangepast. De complexiteit van de code als het gaat om string manipulatie komt de herbruikbaarheid zeker niet ten goede.
-    
-    \textbf{Python} is dankzij het gebruik van packages veel herbruikbaarder. Python maakt met de externe packages al hevig gebruik van modularisatie, dus Python functies kunnen ook gemakkelijk worden gemodulariseerd.
-    
-    \item \textbf{Security vulnerabilities:}
-    
-    \textbf{Rexx} heeft hier het voordeel dat je hebt wat je krijgt op het systeem. Er worden geen externe packages gedownload, dus zijn er weinig risico's bij het gebruik van Rexx.
-    
-    \textbf{Python} heeft met zijn packages een risico groter dan nul. Externe packages van Python kunnen code bevatten die schadelijk is voor het systeem, of die ongewenste toegang kunnen geven aan slechte actoren. Dankzij screening van zulke packages, en het grootschalig gebruik ervan, kunnen de meeste risico's hiervan gemitigeerd worden.
-    Over het algemeen geldt dat kennis over het systeem en de code die eventuele externe packages bevatten, kan vermijden dat slechte code op het systeem wordt uitgevoerd.
-  
-    \item \textbf{Robuustheid van de code:}
-    
-    \textbf{Rexx} heeft enorm krachtige string manipulatie, maar die string manipulatie werkt enkel als de input van buitenaf niet verandert. Als een bepaalde volgorde van input wordt verwacht, en die verandert, dan moet de Rexx code worden aangepast. De werking van de Rexx code zelf zal niet veranderen.
-    
-    Voor \textbf{Python} geldt het omgekeerde. Python is flexibeler voor veranderingen van input, maar de interne werking van de Python code kan wel veranderen. Dit kan zijn door updates van gebruikte externe packages of tools. In het ergste geval kan zelfs een update van Python zelf plaatsvinden. Het is onbekend hoe groot de impact hiervan zou zijn, maar het zou veel teams een pak extra werk bezorgen. In een minder extreem geval kunnen binnen een bedrijf verschillende virtuele omgevingen worden opgezet. Als twee omgevingen moeten worden samengevoegd, kan dat ook fouten veroorzaken als er verschillende (versies van) packages worden gebruikt. Als dit slecht wordt aangepakt, kan Python zo veel extra werk geven.
-    
-    \item \textbf{Ondersteuning van de taal:}
-    
-    \textbf{Rexx} is op het mainframe standaard ondersteund door IBM. Rexx heeft daarom ook documentatie beschikbaar door IBM. Verschillende mensen hebben verschillende meningen over de documentatie van IBM. De ervaring bij het uitvoeren van dit onderzoek was dat de documentatie vaak te complex is voor wat nodig was. Bij het gebruiken van API's is bijvoorbeeld gekozen om geen gebruik te maken van WET, hoewel dit is gemaakt om met API's te communiceren. De enige reden hiervoor is omdat de documentatie te complex was voor het simpele voorbeeld dat werd te getracht te maken. Qua community die informatie en hulp kan bieden is deze significant kleiner dan die van Python. Echter zijn er op de eerder vermelde discord community wel enkele experts aanwezig die heel diepgaande expertise en hulp kunnen bieden. Voorbeelden online zijn er amper of moeilijk te vinden.
-    
-    \textbf{Python} wordt meer en meer ondersteund door IBM, en dankzij open source projecten zoals SEAR verbetert de ondersteuning en integratie voortdurend. Python heeft ook enorm veel informatie en voorbeelden online, die gaan van simpele tutorials, tot grote projecten. Dit is gelinkt aan de community die heel groot is, zowel binnen mainframe als daarbuiten. Over het algemeen is het gemakkelijker om informatie en hulp te vinden over Python dan over Rexx.
+    \item \textbf{Rexx} werkt zoals verwacht zonder enige problemen samen met andere tools op het mainframe. Vanuit Rexx kunnen zowel TSO als ISPF commando's worden uitgevoerd, vanwaar verschillende andere utilities kunnen worden aangeroepen. Deze utilities blijven altijd beschikbaar en geven weinig tot geen problemen.
+    \item \textbf{Python} heeft vaak de juiste omgeving en tools nodig om dezelfde functionaliteiten als Rexx te gebruiken. Python is enkel beschikbaar in de USS omgeving van mainframe, waar eventueel een virtuele omgeving moet worden opgezet om externe packages te installeren. Python heeft niet zomaar toegang tot alle functionaliteiten van Rexx, en is vaak afhankelijk van reeds gebouwde functionaliteiten door IBM, of door open source projecten zoals SEAR. Als deze functionaliteiten bestaan, kunnen ze worden geïnstalleerd of opgezet, en dan kan Python deze taken vaak zonder problemen uitvoeren. Als ze (nog) niet bestaan, is dat meestal onmogelijk.
 \end{itemize}
+
+\subsubsection{Integratie met tools buiten het mainframe:}
+\begin{itemize}
+    \item \textbf{Rexx} kan vaak wel op een of andere manier samenwerken met tools buiten het mainframe. Voor bepaalde use cases bestaan IBM tools, en voor andere kan er gepuzzeld worden met bestaande tools zoals curl. Over het algemeen voelen deze oplossingen echter ingewikkeld en stroef aan. Er zijn geen duidelijke richtlijnen of standaardisatie, en er moet hier en daar manueel worden gewerkt op een manier die niet al te robuust aanvoelt (meer hierover bij robuustheid van de code).
+    \item \textbf{Python} heeft tal van built-in functionaliteiten, en kan daarnaast ook gebruikmaken van een gigantische verzameling aan externe libraries, die nog veel meer functionaliteiten kunnen aanleveren. Het communiceren met API's, iets dat tegenwoordig meer en meer nodig is, kan zonder probleem. Python kan daarnaast goed met verschillende formaten van buiten het mainframe werken, zoals JSON. Python is gemaakt, en wordt voortdurend uitgebreid, om enorm veel zaken te kunnen doen, ver buiten enkel het mainframe. Dit zorgt ervoor dat alles buiten het mainframe beter verloopt met Python.
+\end{itemize}
+
+\subsubsection{Herbruikbaarheid van de code:}
+\begin{itemize}
+    \item \textbf{Rexx} vergt, afhankelijk van de use case, heel wat werk en manuele aanpassingen als de code wordt hergebruikt. Ook modularisatie van de code is niet vanzelfsprekend. Het gebruik van TSO en ISPF commando's zijn het meest herbruikbaar, omdat hier op voorhand keywords kunnen worden aangepast. De complexiteit van de code als het gaat om string manipulatie komt de herbruikbaarheid zeker niet ten goede.
+    \item \textbf{Python} is dankzij het gebruik van packages veel herbruikbaarder. Python maakt met de externe packages al hevig gebruik van modularisatie, dus Python functies kunnen ook gemakkelijk worden gemodulariseerd.
+\end{itemize}
+ 
+\subsubsection{Security vulnerabilities:}
+\begin{itemize}
+    \item \textbf{Rexx} heeft hier het voordeel dat je hebt wat je krijgt op het systeem. Er worden geen externe packages gedownload, dus zijn er weinig risico's bij het gebruik van Rexx.
+    \item \textbf{Python} heeft met zijn packages een risico groter dan nul. Externe packages van Python kunnen code bevatten die schadelijk is voor het systeem, of die ongewenste toegang kunnen geven aan slechte actoren. Dankzij screening van zulke packages, en het grootschalig gebruik ervan, kunnen de meeste risico's hiervan gemitigeerd worden.
+    \item Over het algemeen geldt dat kennis over het systeem en de code die eventuele externe packages bevatten, kan vermijden dat slechte code op het systeem wordt uitgevoerd.  
+\end{itemize}
+
+\subsubsection{Robuustheid van de code:}
+    \begin{itemize}
+        \item \textbf{Rexx} heeft enorm krachtige string manipulatie, maar die string manipulatie werkt enkel als de input van buitenaf niet verandert. Als een bepaalde (volgorde van) input wordt verwacht, en die verandert, dan moet de Rexx code worden aangepast. De werking van de Rexx code zelf zal niet veranderen.
+        \item Voor \textbf{Python} geldt het omgekeerde. Python is flexibeler voor veranderingen van input, maar de interne werking van de Python code kan wel veranderen. Dit kan zijn door updates van de gebruikte externe packages of tools. In het ergste geval kan zelfs een update van Python zelf plaatsvinden. Het is onbekend hoe groot de impact hiervan zou zijn, maar het zou veel teams een pak extra werk bezorgen. In een minder extreem geval kunnen binnen een bedrijf verschillende virtuele omgevingen worden opgezet. Als twee omgevingen moeten worden samengevoegd, kan dat ook fouten veroorzaken als er verschillende (versies van) packages worden gebruikt. Als dit slecht wordt aangepakt, kan Python op die manier veel extra werk veroorzaken.
+    \end{itemize}
+    
+\subsubsection{Ondersteuning van de taal:}
+    \begin{itemize}
+        \item \textbf{Rexx} is op het mainframe standaard ondersteund door IBM. Rexx heeft daarom ook documentatie beschikbaar door IBM. Verschillende mensen hebben verschillende meningen over de documentatie van IBM. De ervaring bij het uitvoeren van dit onderzoek was dat de documentatie vaak te complex is voor wat nodig was. Bij het gebruiken van API's is bijvoorbeeld gekozen om geen gebruik te maken van WET, hoewel dit is gemaakt om met API's te communiceren. Een grote reden hiervoor is omdat de documentatie te complex was voor het simpele voorbeeld dat werd te getracht te maken. Qua community die informatie en hulp kan bieden is deze significant kleiner dan die van Python. Echter zijn er op de eerder vermelde discord community wel enkele experts aanwezig die heel diepgaande expertise en hulp kunnen bieden. Voorbeelden online zijn er amper of zijn moeilijk te vinden.
+        \item \textbf{Python} wordt meer en meer ondersteund door IBM, en dankzij open source projecten zoals Zowe en SEAR verbetert de ondersteuning en integratie voortdurend. Python heeft ook enorm veel informatie en voorbeelden online, die gaan van simpele tutorials, tot grote projecten. Dit is gelinkt aan de community die heel groot is, zowel binnen mainframe als daarbuiten. Over het algemeen is het gemakkelijker om informatie en hulp te vinden voor Python dan voor Rexx.
+    \end{itemize}
