@@ -19,6 +19,7 @@ set +x
 # Loop over all found .tex source files and compile
 for latex_file in ${source_files}; do
   echo "========== Compiling ${latex_file} =========="
+
   set -x
   latexmk \
     -file-line-error \
@@ -26,7 +27,6 @@ for latex_file in ${source_files}; do
     -output-directory="${output_dir}" \
     -shell-escape \
     -synctex=1 \
-    -bibtex \
     -xelatex \
     "${latex_file}"
   set +x
