@@ -247,7 +247,7 @@ with open(output_file, 'w') as f:
 
 
 \begin{minted}[frame=lines, framesep=2mm, linenos]{JCL}
-//{{ userid }} JOB 'TEST JOB',CLASS=A,MSGCLASS=N
+//|{{ userid }}| JOB 'TEST JOB',CLASS=A,MSGCLASS=N
 //S010    EXEC PGM=IEBCOPY
 //SYSPRINT DD SYSOUT=*
 //INDD     DD DISP=SHR,DSN={{ userid }}.{{ srcqual }}
