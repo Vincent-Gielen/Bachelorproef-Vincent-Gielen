@@ -323,7 +323,7 @@ in de doeldataset, en die vervangt (REPLACE) als die al bestaat */
 
 
 \begin{minted}[frame=lines, framesep=2mm, linenos]{JCL}
-//&USERIDJ JOB 'TEST JOB',CLASS=A,MSGCLASS=N
+//|&USERIDJ| JOB 'TEST JOB',CLASS=A,MSGCLASS=N
 //S010    EXEC PGM=IEBCOPY
 //SYSPRINT DD SYSOUT=*
 //INDD     DD DISP=SHR,DSN=&USERID..&SRCQUAL
