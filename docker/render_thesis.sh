@@ -26,6 +26,7 @@ for latex_file in ${source_files}; do
     -output-directory="${output_dir}" \
     -shell-escape \
     -synctex=1 \
+    -bibtex \
     -xelatex \
     "${latex_file}"
   set +x
