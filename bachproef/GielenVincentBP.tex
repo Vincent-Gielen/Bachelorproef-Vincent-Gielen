@@ -13,14 +13,10 @@
 \usepackage{lipsum} % For blind text, can be removed after adding actual content
 \usepackage{pifont}
 \usepackage{csquotes}
-\usepackage[toc,acronym]{glossaries}
 \usepackage{caption}
 \usepackage{morewrites}
 
-\makeglossaries
 
-\newacronym{api}{API}{Application Programming Interface}
-\newacronym{ai}{AI}{Artificiële intelligentie}
 
 %% Pictures to include in the text can be put in the graphics/ folder
 \graphicspath{{../graphics/}}
@@ -87,7 +83,7 @@
 \begin{document}
 
 %---------- Front matter -------------------------------------------------------
-
+\setlength{\emergencystretch}{1em}
 \frontmatter
 
 \hypersetup{pageanchor=false} %% Disable page numbering references
@@ -129,8 +125,6 @@
 % Als je een lijst van afkortingen of termen wil toevoegen, dan hoort die
 % hier thuis. Gebruik bijvoorbeeld de ``glossaries'' package.
 % https://www.overleaf.com/learn/latex/Glossaries
-\printglossary
-\printglossary[type=\acronymtype, title=Lijst van afkortingen, toctitle=Lijst van afkortingen]
 
 
 %---------- Kern ---------------------------------------------------------------
